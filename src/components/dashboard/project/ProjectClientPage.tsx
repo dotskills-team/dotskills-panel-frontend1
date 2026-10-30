@@ -234,6 +234,12 @@ export function ProjectsPageClient() {
     [user?.role],
   );
 
+console.log("PROJECT ROLE DEBUG:", {
+  role: user?.role,
+  user: user,
+  permissions: permissions,
+  canViewFinancials: permissions.canViewFinancials,
+});
   const {
     filters,
     queryFilters,
