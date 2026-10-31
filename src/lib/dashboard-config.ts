@@ -97,6 +97,7 @@ const NAV_ICON = {
   teamSalary: { icon: "Banknote", iconColor: COLOR.teal },
   clients: { icon: "Building2", iconColor: COLOR.cyan },
   projects: { icon: "FolderKanban", iconColor: COLOR.purple },
+  managerProjectManagement: { icon: "FolderKanban", iconColor: COLOR.purple },
   products: { icon: "Package", iconColor: COLOR.amber },
 
   // Operations
@@ -337,10 +338,10 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
           ...NAV_ICON.clients,
         },
         {
-          id: "project-management",
+          id: "manager-project-management",
           label: "Projects",
-          href: "/dashboard/project",
-          ...NAV_ICON.projects,
+          href: "/dashboard/manager-projects",
+          ...NAV_ICON.managerProjectManagement,
         },
         
       ],

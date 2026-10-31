@@ -39,6 +39,7 @@ export type PageAccess =
   | "clients-management"
   | "product-management"
   | "project-management"
+  | "manager-project-management"
   | "purchase-products"
   | "returns"
   | "category-management"
@@ -116,6 +117,12 @@ export const availablePages: Page[] = [
     label: "My Assigned Projects",
     icon: <FileText className="h-4 w-4" />,
     description: "View your assigned projects",
+  },
+     {
+    id: "manager-project-management",
+    label: "Manager Project Management",
+    icon: <FileText className="h-4 w-4" />,
+    description: "Manage projects as a manager",
   },
   {
     id: "my-salaries",
@@ -261,6 +268,7 @@ export const defaultRolePermissions: Record<UserRole, PageAccess[]> = {
     "orders-management",
     "customer-management",
     "my-salaries",
+    "manager-project-management",
   ],
   DEVELOPER: [
     "dashboard",
