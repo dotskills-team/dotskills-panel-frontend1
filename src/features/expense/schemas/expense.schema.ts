@@ -18,6 +18,11 @@ export const expenseQuerySchema = z.object({
   categoryId: z.string().optional(),
   financialAccountId: z.string().optional(),
   sort: z.string().optional(),
+  /** "true" = only the caller's own expenses (used by the My Expenses page). */
+  mine: z.string().optional(),
+  /** Date filter, YYYY-MM-DD. */
+  startDate: z.string().optional(),
+  endDate: z.string().optional(),
 });
 
 export type CreateExpenseInput = z.infer<typeof createExpenseSchema>;

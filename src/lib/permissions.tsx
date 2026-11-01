@@ -49,7 +49,9 @@ export type PageAccess =
   | "expense"
   | "expenseCategory"
   | "fundTransfer"
-  | "payments";
+  | "payments"
+  | "my-accounts"
+  | "my-expenses";
 
 export interface Page {
   id: PageAccess;

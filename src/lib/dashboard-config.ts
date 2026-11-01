@@ -117,6 +117,48 @@ const NAV_ICON = {
   content: { icon: "PenSquare", iconColor: COLOR.violet },
 } as const;
 
+const MY_FINANCE_GROUP: NavGroup = {
+  label: "Finance",
+  icon: "Wallet",
+  iconColor: COLOR.emerald,
+  collapsible: true,
+  items: [
+    {
+      id: "my-accounts",
+      label: "Financial Accounts",
+      href: "/dashboard/my-accounts",
+      ...NAV_ICON.financial,
+    },
+    {
+      id: "my-expenses",
+      label: "Expenses",
+      href: "/dashboard/my-expenses",
+      ...NAV_ICON.expense,
+    },
+  ],
+};
+
+const ADMIN_ACCOUNTS_GROUP: NavGroup = {
+  label: "Accounts",
+  icon: "Wallet",
+  iconColor: COLOR.emerald,
+  collapsible: true,
+  items: [
+    {
+      id: "expense",
+      label: "All Expenses",
+      href: "/dashboard/expenses",
+      ...NAV_ICON.expense,
+    },
+    {
+      id: "financial",
+      label: "Financial-account",
+      href: "/dashboard/financial-account",
+      ...NAV_ICON.financial,
+    },
+  ],
+};
+
 export const navigationConfig: Record<UserRole, NavGroup[]> = {
   SUPER_ADMIN: [
     {
@@ -238,6 +280,7 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
         },
       ],
     },
+    MY_FINANCE_GROUP,
   ],
 
   ADMIN: [
@@ -288,6 +331,8 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
         },
       ],
     },
+    ADMIN_ACCOUNTS_GROUP,
+    MY_FINANCE_GROUP,
   ],
 
   MANAGER: [
@@ -338,6 +383,7 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
         },
       ],
     },
+    MY_FINANCE_GROUP,
   ],
 
   DEVELOPER: [
@@ -376,6 +422,7 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
         // },
       ],
     },
+    MY_FINANCE_GROUP,
   ],
 
   DESIGNER: [
@@ -390,6 +437,7 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
         },
       ],
     },
+    MY_FINANCE_GROUP,
   ],
 
   MARKETER: [
@@ -429,6 +477,7 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
         },
       ],
     },
+    MY_FINANCE_GROUP,
   ],
 
   STAFF: [
@@ -463,5 +512,6 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
         
       ],
     },
+    MY_FINANCE_GROUP,
   ],
 };

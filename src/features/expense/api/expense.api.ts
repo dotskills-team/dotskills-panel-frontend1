@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import type { IExpense } from "@/types/expense.types";
+import type { IExpense, IExpenseSummary } from "@/types/expense.types";
 import type {
   CreateExpenseInput,
   UpdateExpenseInput,
@@ -50,6 +50,12 @@ export async function getExpenses(
   query: ExpenseQueryInput = {},
 ): Promise<ExpenseListResponse> {
   return request<ExpenseListResponse>(`${BASE_URL}${buildQueryString(query)}`);
+}
+
+export async function getExpenseSummary(
+  query: ExpenseQueryInput = {},
+): Promise<{ success?: boolean; message?: string; data: IExpenseSummary }> {
+  return request(`${BASE_URL}/summary${buildQueryString(query)}`);
 }
 
 export async function getExpenseById(id: string): Promise<ExpenseResponse> {

@@ -8,6 +8,7 @@ import {
   deleteExpense,
   getExpenseById,
   getExpenses,
+  getExpenseSummary,
   updateExpense,
   updateExpenseWithAttachment,
 } from "../api/expense.api";
@@ -34,6 +35,14 @@ export function useExpenses(
     queryKey: expenseKeys.list(query),
     queryFn: () => getExpenses(query),
     enabled: options?.enabled ?? true,
+    placeholderData: (previousData) => previousData,
+  });
+}
+
+export function useExpenseSummary(query: ExpenseQueryInput = {}) {
+  return useQuery({
+    queryKey: [...expenseKeys.all, "summary", query] as const,
+    queryFn: () => getExpenseSummary(query),
     placeholderData: (previousData) => previousData,
   });
 }

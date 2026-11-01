@@ -7,12 +7,12 @@ import {
   ArrowLeft,
   ArrowRight,
   CircleDollarSign,
+  Eye,
   Pencil,
   Plus,
   Receipt,
   Search,
   Trash,
-  X,
 } from "lucide-react";
 
 import { useDeleteExpense, useExpenses } from "@/features/expense/hooks/use-expense";
@@ -35,7 +35,15 @@ import {
 } from "@/components/ui/select";
 import { ConfirmDialog } from "@/components/shared/confirm-dialog";
 import { ExpenseFormDialog } from "./expense-form-dialog";
+import { ExpenseDetailsDialog } from "./expense-details-dialog";
 import { formatDate } from "@/utils/dateFormat";
+import type { DashboardRangeParams } from "@/types/dashboard.types";
+import {
+  DateRangeFilter,
+  presetRange,
+  type RangePreset,
+} from "@/components/dashboard/overview/DateRangeFilter";
+import { creatorName } from "@/components/dashboard/my-finance/finance-format";
 
 const money = (value?: number) =>
   new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT" }).format(value ?? 0);
@@ -112,8 +120,8 @@ export function ExpensePageClient() {
   const [search, setSearch] = useState("");
   const [categoryId, setCategoryId] = useState("ALL");
   const [financialAccountId, setFinancialAccountId] = useState("ALL");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [datePreset, setDatePreset] = useState<RangePreset>("all");
+  const [customDates, setCustomDates] = useState<DashboardRangeParams>({});
   const [sort, setSort] = useState("-expenseDate");
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -121,9 +129,16 @@ export function ExpensePageClient() {
   const [formOpen, setFormOpen] = useState(false);
   const [editing, setEditing] = useState<IExpense | null>(null);
   const [deleteTarget, setDeleteTarget] = useState<IExpense | null>(null);
+  const [viewing, setViewing] = useState<IExpense | null>(null);
 
   const categoriesQuery = useExpenseCategories({ limit: 100 });
   const accountsQuery = useFinancialAccounts({ limit: 100 });
+
+  // Preset ranges (or custom dates). "All time" sends no dates.
+  const dateRange = useMemo<DashboardRangeParams>(
+    () => (datePreset === "custom" ? customDates : presetRange(datePreset)),
+    [datePreset, customDates],
+  );
 
   const query = useMemo(
     () => ({
@@ -132,11 +147,11 @@ export function ExpensePageClient() {
       searchTerm: search || undefined,
       categoryId: categoryId === "ALL" ? undefined : categoryId,
       financialAccountId: financialAccountId === "ALL" ? undefined : financialAccountId,
-      startDate: startDate || undefined,
-      endDate: endDate || undefined,
+      startDate: dateRange.startDate || undefined,
+      endDate: dateRange.endDate || undefined,
       sort,
     }),
-    [page, limit, search, categoryId, financialAccountId, startDate, endDate, sort],
+    [page, limit, search, categoryId, financialAccountId, dateRange, sort],
   );
 
   const list = useExpenses(query);
@@ -145,14 +160,6 @@ export function ExpensePageClient() {
   const rows = list.data?.data ?? [];
   const meta = list.data?.meta;
   const totalAmount = rows.reduce((sum, row) => sum + row.amount, 0);
-
-  const hasDateFilter = Boolean(startDate || endDate);
-
-  const clearDates = () => {
-    setStartDate("");
-    setEndDate("");
-    setPage(1);
-  };
 
   const openCreate = () => {
     setEditing(null);
@@ -178,6 +185,11 @@ export function ExpensePageClient() {
   return (
     <div className="flex flex-col gap-6">
       <ExpenseFormDialog open={formOpen} onOpenChange={setFormOpen} existing={editing} />
+      <ExpenseDetailsDialog
+        expense={viewing}
+        open={Boolean(viewing)}
+        onOpenChange={(open) => !open && setViewing(null)}
+      />
       <ConfirmDialog
         open={Boolean(deleteTarget)}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
@@ -228,6 +240,20 @@ export function ExpensePageClient() {
       <Card className="bg-slate-100 dark:bg-slate-950 p-0">
         <CardContent className="flex flex-col gap-4 p-0">
           <div className="pt-5 pb-2 px-4 flex flex-col gap-3">
+            {/* Date filter sits above the other filters: same presets as the dashboard overview */}
+            <DateRangeFilter
+              preset={datePreset}
+              showAll
+              onPresetChange={(next) => {
+                setDatePreset(next);
+                setPage(1);
+              }}
+              custom={customDates}
+              onCustomChange={(next) => {
+                setCustomDates(next);
+                setPage(1);
+              }}
+            />
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
               <div className="relative min-w-0 flex-1">
                 <Search className="absolute left-3 w-5 h-5 top-1.5 text-muted-foreground" />
@@ -291,52 +317,6 @@ export function ExpensePageClient() {
                   ))}
                 </SelectContent>
               </Select>
-              {/* Date filter */}
-              <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                <div className="flex items-center gap-2">
-                  <label htmlFor="expense-start-date" className="text-xs font-medium text-muted-foreground">
-                    From
-                  </label>
-                  <Input
-                    id="expense-start-date"
-                    type="date"
-                    className="w-full sm:w-40"
-                    value={startDate}
-                    max={endDate || undefined}
-                    onChange={(e) => {
-                      setStartDate(e.target.value);
-                      setPage(1);
-                    }}
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <label htmlFor="expense-end-date" className="text-xs font-medium text-muted-foreground">
-                    To
-                  </label>
-                  <Input
-                    id="expense-end-date"
-                    type="date"
-                    className="w-full sm:w-40"
-                    value={endDate}
-                    min={startDate || undefined}
-                    onChange={(e) => {
-                      setEndDate(e.target.value);
-                      setPage(1);
-                    }}
-                  />
-                </div>
-                {hasDateFilter && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="w-fit cursor-pointer"
-                    onClick={clearDates}
-                  >
-                    <X />
-                    Clear dates
-                  </Button>
-                )}
-              </div>
             </div>
 
 
@@ -367,8 +347,8 @@ export function ExpensePageClient() {
                   setSearch("");
                   setCategoryId("ALL");
                   setFinancialAccountId("ALL");
-                  setStartDate("");
-                  setEndDate("");
+                  setDatePreset("all");
+                  setCustomDates({});
                   setPage(1);
                 }}
               >
@@ -384,13 +364,18 @@ export function ExpensePageClient() {
                     <th className="p-3 font-medium">Description</th>
                     <th className="p-3 font-medium">Category</th>
                     <th className="p-3 font-medium">Account</th>
+                    <th className="p-3 font-medium">Recorded by</th>
                     <th className="p-3 font-medium">Amount</th>
                     <th className="p-3 text-right font-medium">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {rows.map((expense) => (
-                    <tr key={expense._id} className="border-b last:border-0 hover:bg-muted/30">
+                    <tr
+                      key={expense._id}
+                      onClick={() => setViewing(expense)}
+                      className="cursor-pointer border-b last:border-0 hover:bg-muted/30"
+                    >
                       <td className="p-3 text-muted-foreground">
                         {/* {new Date(expense.expenseDate).toLocaleDateString()} */}
                           {formatDate(expense.expenseDate)}
@@ -403,9 +388,20 @@ export function ExpensePageClient() {
                       </td>
                       <td className="p-3">{nameOf(expense.categoryId, "name")}</td>
                       <td className="p-3">{nameOf(expense.financialAccountId, "accountName")}</td>
-                      <td className="p-3 font-medium">{money(expense.amount)}</td>
                       <td className="p-3">
+                        <p className="font-medium">{creatorName(expense)}</p>
+                      </td>
+                      <td className="p-3 font-medium">{money(expense.amount)}</td>
+                      <td className="p-3" onClick={(e) => e.stopPropagation()}>
                         <div className="flex justify-end gap-1">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => setViewing(expense)}
+                            aria-label="View expense"
+                          >
+                            <Eye />
+                          </Button>
                           <Button
                             variant="ghost"
                             size="icon"
