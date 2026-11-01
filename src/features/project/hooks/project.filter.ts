@@ -12,9 +12,16 @@ const INITIAL_FILTERS: ProjectFilters = {
   searchTerm: "",
 };
 
-export const useProjectFilters = () => {
+export const useProjectFilters = (
+  initial?: Partial<ProjectFilters>,
+) => {
+  const [initialFilters] = useState<ProjectFilters>(() => ({
+    ...INITIAL_FILTERS,
+    ...initial,
+  }));
+
   const [filters, setFilters] =
-    useState<ProjectFilters>(INITIAL_FILTERS);
+    useState<ProjectFilters>(initialFilters);
 
   const updateFilters = useCallback(
     (patch: Partial<ProjectFilters>) => {
@@ -62,8 +69,8 @@ export const useProjectFilters = () => {
   }, []);
 
   const resetFilters = useCallback(() => {
-    setFilters(INITIAL_FILTERS);
-  }, []);
+    setFilters(initialFilters);
+  }, [initialFilters]);
 
   const queryFilters = useMemo(
     () =>

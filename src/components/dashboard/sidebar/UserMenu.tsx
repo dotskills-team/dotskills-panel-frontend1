@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { ChevronDown, LogOut, Settings, User as UserIcon } from "lucide-react";
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -15,14 +13,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useCurrentUser } from "@/hooks/auth/useCurrentUser";
-import { authService } from "@/services/auth.service";
-import { useAuthStore } from "@/stores";
+import { useLogout } from "@/hooks/auth/useLogout";
 
 export function UserMenu() {
   const { data: user } = useCurrentUser();
-  const router = useRouter();
-  const reset = useAuthStore((state) => state.reset);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
 
   if (!user) return null;
 
@@ -30,14 +25,8 @@ export function UserMenu() {
   const initials =
     `${user.firstName?.charAt(0) ?? ""}${user.lastName?.charAt(0) ?? ""}`.toUpperCase();
 
-  async function handleLogout() {
-    setIsLoggingOut(true);
-    try {
-      await authService.logout();
-    } finally {
-      reset();
-      router.replace("/login");
-    }
+  function handleLogout() {
+    logout();
   }
 
   return (

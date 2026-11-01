@@ -111,12 +111,7 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
           id: "leads",
           label: "Leads",
           href: "/dashboard/leads",
-        },
-        {
-          id: "orders-management",
-          label: "Orders",
-          href: "/dashboard/orders-management",
-        },
+        }
       ],
     },
     {
@@ -194,11 +189,6 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
           label: "Leads",
           href: "/dashboard/leads",
         },
-        {
-          id: "product-management",
-          label: "Products",
-          href: "/dashboard/product-management",
-        },
        {
           id: "clients-management",
           label: "Clients",
@@ -226,17 +216,6 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
           id: "leads",
           label: "Leads",
           href: "/dashboard/leads",
-        },
-         {
-          id: "team-salary",
-          label: "Team Salary",
-          href: "/dashboard/team-salary",
-          description: "Manage salary of team members",
-        },
-        {
-          id: "orders-management",
-          label: "Orders",
-          href: "/dashboard/orders-management",
         },
          {
           id: "clients-management",
@@ -338,11 +317,7 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
           label: "Clients",
           href: "/dashboard/clients",
         },
-        {
-          id: "my-orders",
-          label: "My Orders",
-          href: "/dashboard/my-orders",
-        },
+        
       ],
     },
   ],

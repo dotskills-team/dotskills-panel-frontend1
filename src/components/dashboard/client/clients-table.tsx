@@ -21,6 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { IClient } from "@/types/clients";
 import { useState } from "react";
 import { getClientsTableColumns } from "./clients-table-columns";
+import { useUser } from "../../../context/UserContext";
 
 interface ClientsTableProps {
   clients: IClient[];
@@ -47,6 +48,10 @@ export function ClientsTable({
   const [columnVisibility, setColumnVisibility] =
     useState<any>({});
 
+  const {user: userData} = useUser();
+  const userRole = userData?.role;
+
+
   const columns = getClientsTableColumns({
     onView,
     onEdit,
@@ -54,6 +59,7 @@ export function ClientsTable({
     onAddNote,
     onUploadDocument,
     onDelete,
+    userRole,
   });
 
   const table = useReactTable({
@@ -69,6 +75,8 @@ export function ClientsTable({
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
   });
+
+
 
   return (
     <div className="rounded-lg border border-border/50 overflow-hidden">

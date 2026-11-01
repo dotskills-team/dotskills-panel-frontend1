@@ -37,25 +37,14 @@ export type PageAccess =
   | "security"
   | "team-salary"
   | "clients-management"
-  | "product-management"
   | "project-management"
   | "manager-project-management"
-  | "purchase-products"
-  | "returns"
   | "category-management"
-  | "product-verifications"
-  | "reviews-management"
-  | "brand-management"
-  | "coupons"
   | "blogs"
   | "staff-management"
   | "customer-management"
   | "my-customers"
-  | "orders-management"
   | "leads"
-  | "my-orders"
-  | "pos"
-  | "courier-settings"
   | "financial"
   | "expense"
   | "expenseCategory"
@@ -155,44 +144,10 @@ export const availablePages: Page[] = [
     description: "Security settings",
   },
   // Legacy pages for backward compatibility
-  {
-    id: "product-management",
-    label: "Product Management",
-    icon: <Users className="h-4 w-4" />,
-  },
-  {
-    id: "purchase-products",
-    label: "Purchase Products",
-    icon: <FileText className="h-4 w-4" />,
-  },
-  {
-    id: "returns",
-    label: "Returns",
-    icon: <FileText className="h-4 w-4" />,
-  },
+  
   {
     id: "category-management",
     label: "Category Management",
-    icon: <FileText className="h-4 w-4" />,
-  },
-  {
-    id: "product-verifications",
-    label: "Product Verifications",
-    icon: <Shield className="h-4 w-4" />,
-  },
-  {
-    id: "reviews-management",
-    label: "Reviews Management",
-    icon: <FileText className="h-4 w-4" />,
-  },
-  {
-    id: "brand-management",
-    label: "Brand Management",
-    icon: <FileText className="h-4 w-4" />,
-  },
-  {
-    id: "coupons",
-    label: "Coupons",
     icon: <FileText className="h-4 w-4" />,
   },
   {
@@ -215,31 +170,13 @@ export const availablePages: Page[] = [
     label: "My Customers",
     icon: <Users className="h-4 w-4" />,
   },
-  {
-    id: "orders-management",
-    label: "Orders Management",
-    icon: <FileText className="h-4 w-4" />,
-  },
+  
   {
     id: "leads",
     label: "Leads",
     icon: <Users className="h-4 w-4" />,
   },
-  {
-    id: "my-orders",
-    label: "My Orders",
-    icon: <FileText className="h-4 w-4" />,
-  },
-  {
-    id: "pos",
-    label: "POS",
-    icon: <FileText className="h-4 w-4" />,
-  },
-  {
-    id: "courier-settings",
-    label: "Courier Settings",
-    icon: <Settings className="h-4 w-4" />,
-  },
+  
   {
     id: "financial",
     label: "Financial",
@@ -265,7 +202,6 @@ export const defaultRolePermissions: Record<UserRole, PageAccess[]> = {
     "team-management",
     "analytics",
     "settings",
-    "orders-management",
     "customer-management",
     "my-salaries",
     "manager-project-management",
@@ -279,7 +215,7 @@ export const defaultRolePermissions: Record<UserRole, PageAccess[]> = {
     "integrations",
     "automation",
   ],
-  DESIGNER: ["dashboard", "documentation", "product-management"],
+  DESIGNER: ["dashboard", "documentation"],
   MARKETER: [
     "dashboard",
     "analytics",
@@ -287,7 +223,7 @@ export const defaultRolePermissions: Record<UserRole, PageAccess[]> = {
     "customer-management",
     "my-salaries"
   ],
-  STAFF: ["dashboard", "orders-management", "my-orders", "my-customers"],
+  STAFF: ["dashboard", "my-customers"],
 };
 
 export function hasPermission(

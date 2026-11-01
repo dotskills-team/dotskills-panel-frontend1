@@ -237,7 +237,6 @@ import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { LogOut, Search } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
@@ -258,8 +257,7 @@ import { useCurrentUser } from "@/hooks/auth/useCurrentUser";
 import { navigationConfig } from "@/lib/dashboard-config";
 import type { UserRole } from "@/lib/permissions";
 import { cn } from "@/lib/utils";
-import { authService } from "@/services/auth.service";
-import { useAuthStore } from "@/stores";
+import { useLogout } from "@/hooks/auth/useLogout";
 
 import { SidebarNavItems } from "./SidebarNavItems";
 
@@ -291,9 +289,7 @@ export function PremiumSidebar({
 }: PremiumSidebarProps) {
   const { data: user, isLoading } = useCurrentUser();
   const { isMobile, setOpenMobile, state } = useSidebar();
-  const router = useRouter();
-  const reset = useAuthStore((s) => s.reset);
-  const [isLoggingOut, setIsLoggingOut] = React.useState(false);
+  const { mutate: logout, isPending: isLoggingOut } = useLogout();
 
   const isCollapsed = state === "collapsed";
   const handleSearch = onSearchClick ?? openCommandMenu;
@@ -302,14 +298,8 @@ export function PremiumSidebar({
     if (isMobile) setOpenMobile(false);
   };
 
-  async function handleLogout() {
-    setIsLoggingOut(true);
-    try {
-      await authService.logout();
-    } finally {
-      reset();
-      router.replace("/login");
-    }
+  function handleLogout() {
+    logout();
   }
 
   if (isLoading) {

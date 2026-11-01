@@ -1,66 +1,19 @@
-// // src/features/projects/components/project-trash-row-actions.tsx
-// "use client";
-
-// import { MoreHorizontal, RotateCcw } from "lucide-react";
-
-// import { Button } from "@/components/ui/button";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuItem,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
-// import type { IProject } from "@/types/project.types";
-
-// interface ProjectTrashRowActionsProps {
-//   project: IProject;
-//   onRestore: (project: IProject) => void;
-// }
-
-// export function ProjectTrashRowActions({ project, onRestore }: ProjectTrashRowActionsProps) {
-//   return (
-//     <DropdownMenu>
-//       <DropdownMenuTrigger asChild>
-//         <Button
-//           variant="ghost"
-//           size="icon"
-//           className="h-8 w-8"
-//           onClick={(event) => event.stopPropagation()}
-//         >
-//           <MoreHorizontal className="h-4 w-4" />
-//         </Button>
-//       </DropdownMenuTrigger>
-//       <DropdownMenuContent align="end" onClick={(event) => event.stopPropagation()}>
-//         <DropdownMenuItem onClick={() => onRestore(project)}>
-//           <RotateCcw className="h-4 w-4" />
-//           Restore
-//         </DropdownMenuItem>
-//       </DropdownMenuContent>
-//     </DropdownMenu>
-//   );
-// }
-
 "use client";
 
-import { MoreHorizontal, RotateCcw, Trash2 } from "lucide-react";
+import { RotateCcw, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import type { IProject } from "@/types/project.types";
 
 interface ProjectTrashRowActionsProps {
   project: IProject;
   onRestore: (project: IProject) => void;
   onPermanentDelete: (project: IProject) => void;
+  /** Backend allows permanent delete for SUPER_ADMIN and ADMIN */
   canPermanentDelete?: boolean;
 }
 
+// Visible buttons (not a "..." menu) so permanent delete is easy to find
 export function ProjectTrashRowActions({
   project,
   onRestore,
@@ -68,36 +21,33 @@ export function ProjectTrashRowActions({
   canPermanentDelete = true,
 }: ProjectTrashRowActionsProps) {
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-8 w-8"
-          onClick={(event) => event.stopPropagation()}
-        >
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" onClick={(event) => event.stopPropagation()}>
-        <DropdownMenuItem onClick={() => onRestore(project)}>
-          <RotateCcw className="h-4 w-4" />
-          Restore
-        </DropdownMenuItem>
+    <div
+      className="flex items-center justify-end gap-2"
+      onClick={(event) => event.stopPropagation()}
+    >
+      <Button
+        variant="outline"
+        size="sm"
+        className="h-8 gap-1.5"
+        aria-label={`Restore ${project.name}`}
+        onClick={() => onRestore(project)}
+      >
+        <RotateCcw className="h-3.5 w-3.5" />
+        <span className="hidden sm:inline">Restore</span>
+      </Button>
 
-        {canPermanentDelete && (
-          <>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              variant="destructive"
-              onClick={() => onPermanentDelete(project)}
-            >
-              <Trash2 className="h-4 w-4" />
-              Delete permanently
-            </DropdownMenuItem>
-          </>
-        )}
-      </DropdownMenuContent>
-    </DropdownMenu>
+      {canPermanentDelete && (
+        <Button
+          variant="destructive"
+          size="sm"
+          className="h-8 gap-1.5"
+          aria-label={`Permanently delete ${project.name}`}
+          onClick={() => onPermanentDelete(project)}
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+          <span className="hidden sm:inline">Delete</span>
+        </Button>
+      )}
+    </div>
   );
 }

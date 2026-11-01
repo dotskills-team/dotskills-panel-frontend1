@@ -22,7 +22,9 @@ export function ProjectsTrashPageClient() {
     useProjectFilters();
 
   const { user } = useUser();
-  const canPermanentDelete = user?.role === "SUPER_ADMIN";
+  // Must match the backend (project.service.ts → permanentlyDeleteProject)
+  const canPermanentDelete =
+    user?.role === "SUPER_ADMIN" || user?.role === "ADMIN";
 
   const { data, isLoading, isError, error, refetch } = useDeletedProjects(queryFilters);
   const { restoreProject, permanentDeleteProject } = useProjectMutations();
@@ -39,6 +41,9 @@ export function ProjectsTrashPageClient() {
   const [isBulkRestoring, setIsBulkRestoring] = useState(false);
 
   const [deleteTarget, setDeleteTarget] = useState<IProject | null>(null);
+
+  const [bulkDeleteOpen, setBulkDeleteOpen] = useState(false);
+  const [isBulkDeleting, setIsBulkDeleting] = useState(false);
 
   const [search, setSearch] = useState(filters.searchTerm ?? "");
 
@@ -91,6 +96,30 @@ export function ProjectsTrashPageClient() {
     }
   };
 
+  // Sequential on purpose: each backend delete re-shifts the priority order of
+  // the remaining projects, so parallel deletes could race on priorities.
+  const handleBulkPermanentDelete = async () => {
+    setIsBulkDeleting(true);
+    const failedIds: string[] = [];
+
+    for (const id of selectedIds) {
+      try {
+        await permanentDeleteProject.mutateAsync(id);
+      } catch {
+        failedIds.push(id);
+      }
+    }
+
+    const deletedCount = selectedIds.length - failedIds.length;
+    if (deletedCount > 0) toast.success(`${deletedCount} project(s) permanently deleted.`);
+    if (failedIds.length > 0) toast.error(`${failedIds.length} project(s) could not be deleted.`);
+
+    // Keep only the failed ones selected so the user can retry them
+    setRowSelection(Object.fromEntries(failedIds.map((id) => [id, true])));
+    setIsBulkDeleting(false);
+    setBulkDeleteOpen(false);
+  };
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-2">
@@ -128,6 +157,10 @@ export function ProjectsTrashPageClient() {
           onClearSelection={() => setRowSelection({})}
           onBulkRestore={() => setBulkRestoreOpen(true)}
           isRestoring={isBulkRestoring}
+          onBulkPermanentDelete={
+            canPermanentDelete ? () => setBulkDeleteOpen(true) : undefined
+          }
+          isDeleting={isBulkDeleting}
         />
 
         <ProjectsTrashTable
@@ -187,6 +220,17 @@ export function ProjectsTrashPageClient() {
         variant="destructive"
         isLoading={permanentDeleteProject.isPending}
         onConfirm={confirmPermanentDelete}
+      />
+
+      <ConfirmDialog
+        open={bulkDeleteOpen}
+        onOpenChange={setBulkDeleteOpen}
+        title={`Permanently delete ${selectedIds.length} project(s)?`}
+        description="The selected projects will be deleted forever. This cannot be undone."
+        confirmText="Delete permanently"
+        variant="destructive"
+        isLoading={isBulkDeleting}
+        onConfirm={handleBulkPermanentDelete}
       />
     </div>
   );

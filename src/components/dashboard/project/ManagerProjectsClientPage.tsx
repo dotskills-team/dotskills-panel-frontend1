@@ -10,8 +10,7 @@ import type { IClient } from "@/types/clients";
 import { ProjectsHeader } from "./project-header";
 import { ProjectsStats } from "./ProjectStats";
 import { ProjectsToolbar } from "./ProjectToolbar";
-import { ProjectsTable } from "./ProjectTable";
-import { ProjectsPagination } from "./ProjectPagination";
+import { ProjectsListTable } from "./ProjectsListTable";
 import { ProjectFormDialog } from "./ProjectFormDialog";
 import { ProjectDetailsDialog } from "./ProjectDetailsDialog";
 
@@ -35,18 +34,16 @@ export function ManagerProjectsPageClient() {
     setSort,
     resetFilters,
     activeFilterCount,
-  } = useProjectFilters();
+  } = useProjectFilters({ sort: "priority" });
 
-  const { data, isLoading, isError, error, refetch } = useProjects(queryFilters);
+  const { data, isLoading, isFetching, isError, error, refetch } =
+    useProjects(queryFilters);
 
   const projects = data?.data ?? [];
   const meta = data?.meta;
 
   const { data: clientsResponse } = useClients({ limit: 200000 });
   const clients: IClient[] = clientsResponse?.data ?? [];
-
-  // Row selection is not used for managers (no bulk delete), but the table expects it
-  const [rowSelection, setRowSelection] = useState({});
 
   const [detailsProject, setDetailsProject] = useState<IProject | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -72,9 +69,6 @@ export function ManagerProjectsPageClient() {
     setFormOpen(true);
   }, []);
 
-  // Managers cannot delete
-  const handleDelete = useCallback(() => {}, []);
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -96,37 +90,30 @@ export function ManagerProjectsPageClient() {
           clients={clients}
           canCreate={MANAGER_PERMISSIONS.canCreate}
           canViewFinancials={MANAGER_PERMISSIONS.canViewFinancials}
+          showTrash={false}
         />
 
-        <ProjectsTable
+        <ProjectsListTable
           projects={projects}
           isLoading={isLoading}
+          isFetching={isFetching}
           isError={isError}
           errorMessage={error?.message}
-          hasActiveFilters={activeFilterCount > 0 || Boolean(filters.searchTerm)}
-          sort={filters.sort ?? "-createdAt"}
-          onSortChange={setSort}
-          onClearFilters={resetFilters}
-          onAddProject={handleAddProject}
           onRetry={() => refetch()}
-          selection={rowSelection}
-          onSelectionChange={setRowSelection}
+          hasActiveFilters={activeFilterCount > 0 || Boolean(filters.searchTerm)}
+          onClearFilters={resetFilters}
+          sort={filters.sort ?? "priority"}
+          onSortChange={setSort}
+          page={meta?.page ?? filters.page ?? 1}
+          limit={meta?.limit ?? filters.limit ?? 10}
+          total={meta?.total ?? 0}
+          totalPage={meta?.totalPage ?? 1}
+          onPageChange={setPage}
+          onLimitChange={setLimit}
           onOpenDetails={handleOpenDetails}
           onEdit={handleEdit}
-          onDelete={handleDelete}
           permissions={MANAGER_PERMISSIONS}
         />
-
-        {meta && projects.length > 0 && (
-          <ProjectsPagination
-            page={meta.page}
-            limit={meta.limit}
-            total={meta.total}
-            totalPage={meta.totalPage}
-            onPageChange={setPage}
-            onLimitChange={setLimit}
-          />
-        )}
       </div>
 
       <ProjectFormDialog

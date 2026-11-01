@@ -20,20 +20,20 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <SidebarProvider>
       <PremiumSidebar />
-      <SidebarInset>
+      {/* min-w-0: without it this flex child grows to the widest content (e.g. a
+          wide table) and the whole page gets a horizontal scrollbar. Wide content
+          must scroll inside its own container instead. */}
+      <SidebarInset className="min-w-0">
         {/* Sticky Header */}
         <DashboardHeader />
 
-        {/* Main Content Area */}
-        <main className="bg-gray-100 dark:bg-slate-950 flex-1 overflow-hidden">
-          <div className="h-full overflow-auto">
-            <div className="min-h-full">
-              <div className="flex flex-col gap-4 p-4">
-                {children}
-              </div>
-            </div>
+        {/* Main Content Area: the window is the only vertical scroller (no nested
+            overflow container, which produced a second scrollbar) */}
+        <div className="bg-gray-100 dark:bg-slate-950 min-w-0 flex-1">
+          <div className="flex min-w-0 flex-col gap-4 p-3 sm:p-4">
+            {children}
           </div>
-        </main>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );

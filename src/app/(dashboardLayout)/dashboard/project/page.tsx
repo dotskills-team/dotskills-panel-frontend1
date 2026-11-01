@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 
-import { LeadsPageClient } from "@/components/dashboard/lead/leads-page-client";
 import { ProjectsPageClient } from "@/components/dashboard/project/ProjectClientPage";
 
 export const metadata: Metadata = {
@@ -10,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function ProjectsPage() {
   return (
-    <div className="p-4">
+    <div className="min-w-0">
       <ProjectsPageClient />
     </div>
   );

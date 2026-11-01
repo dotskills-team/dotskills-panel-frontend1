@@ -255,6 +255,8 @@ interface ProjectsToolbarProps {
   clients?: IClient[];
   canCreate?: boolean;
   canViewFinancials?: boolean;
+  /** Link to the trash page. Hide it for roles that can't use trash (e.g. MANAGER). */
+  showTrash?: boolean;
   onSearchChange: (value: string) => void;
   onUpdateFilters: (patch: Partial<ProjectFilters>) => void;
   onAddProject: () => void;
@@ -293,6 +295,7 @@ export function ProjectsToolbar({
   clients = [],
   canCreate = true,
   canViewFinancials = true,
+  showTrash = true,
   onSearchChange,
   onUpdateFilters,
   onAddProject,
@@ -324,17 +327,19 @@ export function ProjectsToolbar({
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <Button
-            variant="default"
-            size="sm"
-            className="gap-2 text-white bg-red-600 transition-transform duration-500 ease-in-out hover:scale-105 hover:cursor-pointer hover:bg-rose-800"
-            asChild
-          >
-            <Link href="/dashboard/project/trash">
-              <Trash2 className="h-4 w-4" />
-              Trash
-            </Link>
-          </Button>
+          {showTrash && (
+            <Button
+              variant="default"
+              size="sm"
+              className="gap-2 text-white bg-red-600 transition-transform duration-500 ease-in-out hover:scale-105 hover:cursor-pointer hover:bg-rose-800"
+              asChild
+            >
+              <Link href="/dashboard/project/trash">
+                <Trash2 className="h-4 w-4" />
+                Trash
+              </Link>
+            </Button>
+          )}
 
           {canCreate && (
             <Button

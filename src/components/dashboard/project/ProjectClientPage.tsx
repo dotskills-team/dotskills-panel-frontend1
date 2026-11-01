@@ -282,8 +282,7 @@ import { ProjectsHeader } from "./project-header";
 import { ProjectsStats } from "./ProjectStats";
 import { ProjectsToolbar } from "./ProjectToolbar";
 import { ProjectsBulkActionsBar } from "./ProjectBulkActionBar";
-import { ProjectsTable } from "./ProjectTable";
-import { ProjectsPagination } from "./ProjectPagination";
+import { ProjectsListTable } from "./ProjectsListTable";
 import { ProjectFormDialog } from "./ProjectFormDialog";
 import { ProjectDetailsDialog } from "./ProjectDetailsDialog";
 import { useClients } from "@/features/clients/hooks";
@@ -308,9 +307,10 @@ export function ProjectsPageClient() {
     setSort,
     resetFilters,
     activeFilterCount,
-  } = useProjectFilters();
+  } = useProjectFilters({ sort: "priority" });
 
-  const { data, isLoading, isError, error, refetch } = useProjects(queryFilters);
+  const { data, isLoading, isFetching, isError, error, refetch } =
+    useProjects(queryFilters);
   const { trashProject } = useProjectMutations();
 
   const projects = data?.data ?? [];
@@ -413,35 +413,31 @@ export function ProjectsPageClient() {
           isDeleting={isBulkDeleting}
         />
 
-        <ProjectsTable
+        <ProjectsListTable
           projects={projects}
           isLoading={isLoading}
+          isFetching={isFetching}
           isError={isError}
           errorMessage={error?.message}
-          hasActiveFilters={activeFilterCount > 0 || Boolean(filters.searchTerm)}
-          sort={filters.sort ?? "-createdAt"}
-          onSortChange={setSort}
-          onClearFilters={resetFilters}
-          onAddProject={handleAddProject}
           onRetry={() => refetch()}
-          selection={rowSelection}
-          onSelectionChange={setRowSelection}
+          hasActiveFilters={activeFilterCount > 0 || Boolean(filters.searchTerm)}
+          onClearFilters={resetFilters}
+          sort={filters.sort ?? "priority"}
+          onSortChange={setSort}
+          page={meta?.page ?? filters.page ?? 1}
+          limit={meta?.limit ?? filters.limit ?? 10}
+          total={meta?.total ?? 0}
+          totalPage={meta?.totalPage ?? 1}
+          onPageChange={setPage}
+          onLimitChange={setLimit}
           onOpenDetails={handleOpenDetails}
           onEdit={handleEdit}
           onDelete={handleDelete}
           permissions={ADMIN_PERMISSIONS}
+          hiddenColumns={["developers"]}
+          selection={rowSelection}
+          onSelectionChange={setRowSelection}
         />
-
-        {meta && projects.length > 0 && (
-          <ProjectsPagination
-            page={meta.page}
-            limit={meta.limit}
-            total={meta.total}
-            totalPage={meta.totalPage}
-            onPageChange={setPage}
-            onLimitChange={setLimit}
-          />
-        )}
       </div>
 
       <ProjectFormDialog
