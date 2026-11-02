@@ -108,7 +108,7 @@ const RESPONSIVE = Object.fromEntries(
     COLUMNS.map((c) => [c.key, c.responsive]),
 ) as Record<ColumnKey, string>;
 
-const PAGE_SIZES = [10, 20, 50];
+const PAGE_SIZES = [10, 20, 50, 100];
 
 // Budget minus completed payments (same rule as the previous admin table)
 const getDueAmount = (project: IProject) => {

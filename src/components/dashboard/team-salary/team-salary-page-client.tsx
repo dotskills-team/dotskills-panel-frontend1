@@ -123,7 +123,7 @@ function StatCard({
   tone: string;
 }) {
   return (
-    <Card className="rounded-xl border-0 bg-linear-to-br bg-gray-100 dark:bg-slate-900 ease-in-out duration-500 transform hover:bg-slate-950 hover:scale-105 shadow-sm overflow-hidden transition-shadow hover:-translate-y-0.5 hover:shadow-md">
+    <Card className="rounded-xl border-0 bg-linear-to-br bg-gray-100  transition-all ease-in-out duration-500 transform hover:bg-slate-200 dark:bg-slate-900 hover:scale-105 shadow-sm overflow-hidden hover:-translate-y-0.5 hover:shadow-md">
       <CardContent className="flex items-center gap-3 p-4">
         <div
           className={cn(
@@ -134,9 +134,9 @@ function StatCard({
           <Icon />
         </div>
         <div className="min-w-0">
-          <p className="text-xs text-muted-foreground">{title}</p>
+          <p className="text-xs ">{title}</p>
           <p className="mt-1 text-lg font-semibold tracking-tight">{value}</p>
-          <p className="truncate text-xs text-muted-foreground">{caption}</p>
+          <p className="truncate text-xs">{caption}</p>
         </div>
       </CardContent>
     </Card>
@@ -1001,7 +1001,7 @@ export function TeamSalaryPageClient() {
               : "Total this month"
           }
           icon={WalletCards}
-          tone="bg-primary/10 text-primary"
+          tone="bg-blue-500/10 text-blue-600"
         />
         <StatCard
           title="Total Paid"

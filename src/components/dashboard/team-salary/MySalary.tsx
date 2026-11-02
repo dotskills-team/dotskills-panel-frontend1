@@ -787,7 +787,7 @@ const MySalaries = () => {
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    {[10, 20, 50].map((n) => (
+                                    {[10, 20, 50, 100].map((n) => (
                                         <SelectItem key={n} value={String(n)}>
                                             {n}
                                         </SelectItem>
