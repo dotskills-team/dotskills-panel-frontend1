@@ -1,5 +1,6 @@
 import {
   PaymentStatus,
+  ProjectPaymentState,
   ProjectStatus,
   ProjectType,
 } from "@/types/project.types";
@@ -248,6 +249,38 @@ export const PAYMENT_STATUS_CONFIG: Record<
 };
 
 export const PAYMENT_STATUS_OPTIONS = Object.values(PAYMENT_STATUS_CONFIG);
+
+// Derived project payment state (shown on project badges)
+export const PROJECT_PAYMENT_STATE_CONFIG: Record<
+  ProjectPaymentState,
+  { label: string; className: string }
+> = {
+  DUE: {
+    label: "Due",
+    className: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-300",
+  },
+  PARTIAL: {
+    label: "Partial",
+    className: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300",
+  },
+  PAID: {
+    label: "Paid",
+    className: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300",
+  },
+  NO_BUDGET: {
+    label: "No budget",
+    className: "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200",
+  },
+};
+
+// Payment filter on the projects page (the server maps OUTSTANDING and ADVANCE)
+export const PROJECT_PAYMENT_FILTER_OPTIONS: { value: string; label: string }[] = [
+  { value: ProjectPaymentState.DUE, label: "Due" },
+  { value: ProjectPaymentState.PARTIAL, label: "Partial" },
+  { value: ProjectPaymentState.PAID, label: "Paid" },
+  { value: "OUTSTANDING", label: "Outstanding (Due + Partial)" },
+  { value: "ADVANCE", label: "Advance received" },
+];
 
 export const PROJECT_STATUS_OPTIONS = Object.values(
   PROJECT_STATUS_CONFIG,

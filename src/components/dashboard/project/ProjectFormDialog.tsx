@@ -918,7 +918,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
 import type { IProject } from "@/types/project.types";
-import { PaymentStatus } from "@/types/project.types";
+import { PaymentCategory, PaymentStatus, ProjectPaymentState } from "@/types/project.types";
 import { CreateProjectFormOutput, createProjectFormSchema, CreateProjectFormValues } from "@/features/project/schema/project.schema";
 import { PAYMENT_STATUS_OPTIONS, PROJECT_STATUS_OPTIONS, PROJECT_TYPE_OPTIONS } from "@/features/project/constants/project.constants";
 import { useProjectMutations } from "@/features/project/hooks";
@@ -962,7 +962,7 @@ const EMPTY_VALUES: CreateProjectFormValues = {
     technologies: "",
     documents: [],
     status: PROJECT_STATUS_OPTIONS[0].value,
-    paymentStatus: PaymentStatus.DUE,
+    paymentStatus: ProjectPaymentState.DUE,
     payments: [],
     paymentSchedule: [],
     nextPaymentDate: "",
@@ -986,7 +986,8 @@ function buildFallbackProjectForInvoice(
         technologies: values.technologies ?? baseProject.technologies,
         documents: (values.documents as IProject["documents"]) ?? baseProject.documents,
         status: values.status ?? baseProject.status,
-        paymentStatus: values.paymentStatus ?? baseProject.paymentStatus,
+        // Payment state is derived by the server, so the fallback keeps the saved value
+        paymentStatus: baseProject.paymentStatus,
         payments: (values.payments as IProject["payments"]) ?? baseProject.payments,
         paymentSchedule:
             (values.paymentSchedule as IProject["paymentSchedule"]) ?? baseProject.paymentSchedule,
@@ -1014,11 +1015,13 @@ const projectToFormValues = (project: IProject): CreateProjectFormValues => ({
         link: doc.link,
     })) ?? [],
     status: project.status,
-    paymentStatus: project.paymentStatus ?? PaymentStatus.DUE,
+    paymentStatus: project.paymentStatus ?? ProjectPaymentState.DUE,
     payments: project.payments?.map((p) => ({
         amount: p.amount,
         date: p.date?.slice(0, 10) ?? "",
         status: p.status,
+        isAdvance: p.isAdvance ?? p.status === PaymentStatus.ADVANCED,
+        category: p.category ?? PaymentCategory.PROJECT,
         note: p.note ?? "",
         financialAccountId:
             typeof p.financialAccountId === "object" && p.financialAccountId
@@ -1443,23 +1446,10 @@ export function ProjectFormDialog({
 
                                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                                         <Field label="Payment Status">
-                                            <Select
-                                                value={form.watch("paymentStatus")}
-                                                onValueChange={(value) =>
-                                                    form.setValue("paymentStatus", value as CreateProjectFormValues["paymentStatus"])
-                                                }
-                                            >
-                                                <SelectTrigger>
-                                                    <SelectValue placeholder="Select payment status" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    {PAYMENT_STATUS_OPTIONS.map((option) => (
-                                                        <SelectItem key={option.value} value={option.value}>
-                                                            {option.label}
-                                                        </SelectItem>
-                                                    ))}
-                                                </SelectContent>
-                                            </Select>
+                                            {/* Calculated from the payments below, not chosen by hand */}
+                                            <p className="flex h-9 items-center text-sm text-muted-foreground">
+                                                Calculated automatically from payments
+                                            </p>
                                         </Field>
                                         <Field label="Next Payment Date">
                                             <Input type="date" {...form.register("nextPaymentDate")} />
@@ -1502,6 +1492,8 @@ export function ProjectFormDialog({
                                                     amount: undefined as unknown as number,
                                                     date: "",
                                                     status: PaymentStatus.DUE,
+                                                    isAdvance: false,
+                                                    category: PaymentCategory.PROJECT,
                                                     note: "",
                                                     financialAccountId: "",
                                                 })
@@ -1551,13 +1543,31 @@ export function ProjectFormDialog({
                                                             <SelectValue placeholder="Status" />
                                                         </SelectTrigger>
                                                         <SelectContent>
-                                                            {PAYMENT_STATUS_OPTIONS.map((option) => (
+                                                            {PAYMENT_STATUS_OPTIONS.filter(
+                                                                (option) =>
+                                                                    // ADVANCED is no longer chosen here; only legacy lines keep it
+                                                                    option.value !== PaymentStatus.ADVANCED ||
+                                                                    field.status === PaymentStatus.ADVANCED,
+                                                            ).map((option) => (
                                                                 <SelectItem key={option.value} value={option.value}>
-                                                                    {option.label}
+                                                                    {option.value === PaymentStatus.ADVANCED
+                                                                        ? "Advanced (legacy)"
+                                                                        : option.label}
                                                                 </SelectItem>
                                                             ))}
                                                         </SelectContent>
                                                     </Select>
+                                                </Field>
+                                                <Field label="Advance">
+                                                    <label className="flex h-9 items-center gap-2 text-sm">
+                                                        <Checkbox
+                                                            checked={!!form.watch(`payments.${index}.isAdvance`)}
+                                                            onCheckedChange={(checked) =>
+                                                                form.setValue(`payments.${index}.isAdvance`, checked === true)
+                                                            }
+                                                        />
+                                                        Advance payment
+                                                    </label>
                                                 </Field>
                                                 <Field label="Account">
                                                     <Select

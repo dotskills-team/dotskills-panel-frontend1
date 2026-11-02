@@ -51,11 +51,25 @@ export interface FinancialAccount {
   updatedAt?: string;
 }
 
+// Payment status of a single payment line
 export enum PaymentStatus {
   DUE = "DUE",
   PARTIAL = "PARTIAL",
   ADVANCED = "ADVANCED",
   COMPLETE = "COMPLETE",
+}
+
+// Derived project-level payment state (calculated by the server, never typed in)
+export enum ProjectPaymentState {
+  DUE = "DUE",
+  PARTIAL = "PARTIAL",
+  PAID = "PAID",
+  NO_BUDGET = "NO_BUDGET",
+}
+
+export enum PaymentCategory {
+  PROJECT = "PROJECT",
+  MAINTENANCE = "MAINTENANCE",
 }
 
 export interface ProjectStatsData {
@@ -83,6 +97,8 @@ export interface IPayment {
   status: PaymentStatus;
   note?: string;
   financialAccountId?: string | FinancialAccount | null;
+  isAdvance?: boolean;
+  category?: PaymentCategory;
 }
 
 export interface IProjectDocument {
@@ -123,7 +139,12 @@ export interface IProject {
 
   status: ProjectStatus;
 
-  paymentStatus?: PaymentStatus;
+  paymentStatus?: ProjectPaymentState;
+  // Server-calculated payment figures (absent for roles without financial access)
+  receivedAmount?: number;
+  outstandingAmount?: number;
+  overpaidAmount?: number;
+  hasAdvance?: boolean;
   payments?: IPayment[];
   paymentSchedule?: IPaymentInstallment[];
   nextPaymentDate?: string;
@@ -168,7 +189,8 @@ export interface CreateProjectPayload {
 
   status?: ProjectStatus;
 
-  paymentStatus?: PaymentStatus;
+  // Ignored by the server: payment state is always derived
+  paymentStatus?: string;
   payments?: Omit<IPayment, "_id">[];
   paymentSchedule?: Omit<IPaymentInstallment, "_id">[];
   nextPaymentDate?: string;
@@ -197,7 +219,8 @@ export interface ProjectFilters {
   sort?: string;
   startDate?: string;
   endDate?: string;
-  paymentStatus?: PaymentStatus;
+  // DUE, PARTIAL, PAID, NO_BUDGET, or the UI filters OUTSTANDING / ADVANCE
+  paymentStatus?: ProjectPaymentState | "OUTSTANDING" | "ADVANCE";
 }
 
 // Project shape returned to developers (no budget/payment data)

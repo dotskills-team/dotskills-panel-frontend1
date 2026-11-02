@@ -52,6 +52,7 @@ import {
     fullName,
 } from "@/features/project/constants/project-table.constants";
 import { formatCurrency } from "@/features/project/utils/project.utils";
+import { getOutstandingAmount } from "@/features/project/utils/payment.utils";
 import type { ProjectPermissions } from "@/features/project/utils/project.permission";
 import { ProjectRowActions } from "./ProjectRowAction";
 
@@ -110,16 +111,8 @@ const RESPONSIVE = Object.fromEntries(
 
 const PAGE_SIZES = [10, 20, 50, 100];
 
-// Budget minus completed payments (same rule as the previous admin table)
-const getDueAmount = (project: IProject) => {
-    if (project.budget === undefined || project.budget === null) return undefined;
-
-    const totalPaid = (project.payments ?? [])
-        .filter((p) => p.status === "COMPLETE")
-        .reduce((sum, p) => sum + (p.amount || 0), 0);
-
-    return Math.max(project.budget - totalPaid, 0);
-};
+// Positive-only outstanding amount (server value, same rule as the fallback)
+const getDueAmount = (project: IProject) => getOutstandingAmount(project);
 
 const dueClass = (due?: number) =>
     due === undefined

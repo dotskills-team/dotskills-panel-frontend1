@@ -213,6 +213,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import type { IProject } from "@/types/project.types";
 import { PROJECT_STATUS_CONFIG, PROJECT_TYPE_OPTIONS } from "@/features/project/constants/project.constants";
 import { formatCurrency, formatDate } from "@/features/project/utils/project.utils";
+import { getOutstandingAmount } from "@/features/project/utils/payment.utils";
 import { ProjectRowActions } from "./ProjectRowAction";
 import { ProjectPermissions } from "@/features/project/utils/project.permission";
 
@@ -329,13 +330,7 @@ export function getProjectsTableColumns({
       header: "Due Amount",
       cell: ({ row }) => {
         const project = row.original;
-        const totalPaid = (project.payments ?? [])
-          .filter((p) => p.status === "COMPLETE")
-          .reduce((sum, p) => sum + (p.amount || 0), 0);
-        const amountDue =
-          project.budget !== undefined && project.budget !== null
-            ? Math.max(project.budget - totalPaid, 0)
-            : undefined;
+        const amountDue = getOutstandingAmount(project);
 
         return (
           <span

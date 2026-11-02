@@ -158,7 +158,10 @@ interface ProjectInvoicePdfProps {
 export function ProjectInvoicePdf({ project, logoSrc = "/logo.png" }: ProjectInvoicePdfProps) {
     const clientName = `${project.client?.firstName ?? ""} ${project.client?.lastName ?? ""}`.trim();
     const schedule = project.paymentSchedule ?? [];
-    const totalPaid = (project.payments ?? []).reduce((sum, p) => sum + (p.amount || 0), 0);
+    // Received = COMPLETE + ADVANCED payment lines (same rule as the project totals)
+    const totalPaid = (project.payments ?? [])
+      .filter((p) => p.status === "COMPLETE" || p.status === "ADVANCED")
+      .reduce((sum, p) => sum + (p.amount || 0), 0);
 
     return (
         <Document>

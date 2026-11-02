@@ -53,7 +53,7 @@
 
 
 import { z } from "zod";
-import { PaymentStatus, ProjectStatus, ProjectType } from "@/types/project.types";
+import { PaymentCategory, PaymentStatus, ProjectStatus, ProjectType } from "@/types/project.types";
 
 const csvToArray = (val: string) =>
   val
@@ -72,6 +72,8 @@ const paymentSchema = z.object({
   status: z.nativeEnum(PaymentStatus),
   note: z.string().optional(),
   financialAccountId: z.string().optional(),
+  isAdvance: z.boolean().optional(),
+  category: z.nativeEnum(PaymentCategory).optional(),
 });
 
 const paymentInstallmentSchema = z.object({
@@ -102,7 +104,8 @@ export const createProjectFormSchema = z.object({
     .transform(csvToArray),
   documents: z.array(documentSchema).optional().default([]),
   status: z.nativeEnum(ProjectStatus).optional(),
-  paymentStatus: z.nativeEnum(PaymentStatus).optional(),
+  // Derived by the server; kept optional so older saved forms still validate
+  paymentStatus: z.string().optional(),
   payments: z.array(paymentSchema).optional().default([]),
   paymentSchedule: z.array(paymentInstallmentSchema).optional().default([]),
   nextPaymentDate: z.string().optional(),

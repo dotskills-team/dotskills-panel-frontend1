@@ -83,7 +83,7 @@ interface ClientProject {
   liveUrl?: string;
   projectManager?: ProjectUser | null;
   developers?: ProjectUser[];
-  payments?: { amount: number }[];
+  payments?: { amount: number; status?: string }[];
 }
 
 const COMPLETED_STATUSES = ["COMPLETED", "DELIVERED", "DONE_DUE"];
@@ -108,6 +108,8 @@ const PROJECT_STATUS_STYLES: Record<string, string> = {
 
 const PAYMENT_STATUS_STYLES: Record<string, string> = {
   DUE: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
+  PAID: "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400",
+  NO_BUDGET: "bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-200",
   PARTIAL:
     "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
   ADVANCED: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
@@ -124,8 +126,11 @@ const labelize = (value?: string) =>
         .join(" ")
     : "—";
 
+// Received = COMPLETE + ADVANCED payment lines (same rule as the project totals)
 const getProjectPaid = (project: ClientProject) =>
-  (project.payments ?? []).reduce((sum, p) => sum + (p.amount ?? 0), 0);
+  (project.payments ?? [])
+    .filter((p) => p.status === "COMPLETE" || p.status === "ADVANCED")
+    .reduce((sum, p) => sum + (p.amount ?? 0), 0);
 
 const getProjectDue = (project: ClientProject) =>
   Math.max((project.budget ?? 0) - getProjectPaid(project), 0);

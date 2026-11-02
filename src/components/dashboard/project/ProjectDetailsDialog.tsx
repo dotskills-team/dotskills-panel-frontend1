@@ -490,21 +490,31 @@ import { PaymentStatus } from "@/types/project.types";
 import { PROJECT_STATUS_CONFIG, PROJECT_TYPE_OPTIONS } from "@/features/project/constants/project.constants";
 import { getUserFullName } from "@/features/users/utils/user.utils";
 import { formatCurrency, formatDate } from "@/features/project/utils/project.utils";
+import {
+  getOutstandingAmount,
+  getOverpaidAmount,
+  getReceivedAmount,
+} from "@/features/project/utils/payment.utils";
 
 const TYPE_LABELS = Object.fromEntries(
   PROJECT_TYPE_OPTIONS.map((option) => [option.value, option.label]),
 );
 
-const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
-  [PaymentStatus.DUE]: "Due",
-  [PaymentStatus.PARTIAL]: "Partial",
+// Project state (DUE / PARTIAL / PAID / NO_BUDGET) plus legacy payment-line statuses
+const PAYMENT_STATUS_LABELS: Record<string, string> = {
+  DUE: "Due",
+  PARTIAL: "Partial",
+  PAID: "Paid",
+  NO_BUDGET: "No budget",
   [PaymentStatus.ADVANCED]: "Advanced",
   [PaymentStatus.COMPLETE]: "Complete",
 };
 
-const PAYMENT_STATUS_CLASSNAMES: Record<PaymentStatus, string> = {
-  [PaymentStatus.DUE]: "border-red-300 bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300",
-  [PaymentStatus.PARTIAL]: "border-amber-300 bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
+const PAYMENT_STATUS_CLASSNAMES: Record<string, string> = {
+  DUE: "border-red-300 bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300",
+  PARTIAL: "border-amber-300 bg-amber-50 text-amber-700 dark:bg-amber-950 dark:text-amber-300",
+  PAID: "border-emerald-300 bg-emerald-50 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
+  NO_BUDGET: "border-zinc-300 bg-zinc-50 text-zinc-700 dark:bg-zinc-900 dark:text-zinc-200",
   [PaymentStatus.ADVANCED]: "border-cyan-300 bg-cyan-50 text-cyan-700 dark:bg-cyan-950 dark:text-cyan-300",
   [PaymentStatus.COMPLETE]: "border-green-300 bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300",
 };
@@ -600,17 +610,9 @@ export function ProjectDetailsDialog({
     PROJECT_STATUS_CONFIG[project.status as IProject["status"]];
 
   const paymentStatus = full.paymentStatus;
-  const totalPaid = (full.payments ?? [])
-    .filter(
-      (p) =>
-        p.status === PaymentStatus.COMPLETE ||
-        p.status === PaymentStatus.ADVANCED,
-    )
-    .reduce((sum, p) => sum + (p.amount || 0), 0);
-  const amountDue =
-    full.budget !== undefined && full.budget !== null
-      ? Math.max(full.budget - totalPaid, 0)
-      : undefined;
+  const totalPaid = getReceivedAmount(full);
+  const amountDue = getOutstandingAmount(full);
+  const overpaid = getOverpaidAmount(full);
 
   const hasPaymentSection =
     canViewFinancials &&
@@ -823,6 +825,14 @@ export function ProjectDetailsDialog({
                       value={amountDue !== undefined ? formatCurrency(amountDue) : "—"}
                       valueClassName="text-red-600 dark:text-red-400"
                     />
+                    {overpaid > 0 && (
+                      <InfoItem
+                        icon={Wallet}
+                        label="Overpaid"
+                        value={formatCurrency(overpaid)}
+                        valueClassName="text-emerald-600 dark:text-emerald-400"
+                      />
+                    )}
                     {full.nextPaymentDate && (
                       <InfoItem
                         icon={CalendarDays}

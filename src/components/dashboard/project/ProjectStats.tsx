@@ -65,13 +65,17 @@ interface ProjectsStatsProps {
 }
 
 export function ProjectsStats({ projectStat, isLoading, showMoney = true }: ProjectsStatsProps) {
-  const { total, Planning, InProgress, Completed, OnHold, DoneDue, Delivered, totalValue, totalPaid, totalDue } =
+  const { total, Planning, InProgress, Completed, OnHold, DoneDue, Delivered, totalValue, totalPaid, totalDue, totalOverpaid } =
     projectStat || {};
 
   const moneyStats = [
     { label: "Total Value", value: formatMoney(totalValue), icon: Wallet, gradient: "from-indigo-700 to-purple-500" },
-    { label: "Total Paid", value: formatMoney(totalPaid), icon: CircleCheck, gradient: "from-green-700 to-emerald-500" },
-    { label: "Total Due", value: formatMoney(totalDue), icon: CirclePause, gradient: "from-red-700 to-rose-500" },
+    { label: "Total Received", value: formatMoney(totalPaid), icon: CircleCheck, gradient: "from-green-700 to-emerald-500" },
+    { label: "Total Outstanding", value: formatMoney(totalDue), icon: CirclePause, gradient: "from-red-700 to-rose-500" },
+    // Only when the server sends it (admin / super admin)
+    ...(totalOverpaid !== undefined
+      ? [{ label: "Total Overpaid", value: formatMoney(totalOverpaid), icon: Wallet, gradient: "from-teal-700 to-cyan-500" }]
+      : []),
   ];
 
   const stats = [
@@ -102,7 +106,7 @@ export function ProjectsStats({ projectStat, isLoading, showMoney = true }: Proj
   return (
     <div className="flex flex-col gap-3">
       {showMoney && (
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">{moneyStats.map(renderCard)}</div>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">{moneyStats.map(renderCard)}</div>
       )}
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-7">{stats.map(renderCard)}</div>

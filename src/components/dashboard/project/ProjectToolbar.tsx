@@ -242,12 +242,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { PaymentStatus } from "@/types/project.types";
 import type { ProjectFilters } from "@/types/project.types";
 import type { IClient } from "@/types/clients";
 import {
   PROJECT_STATUS_OPTIONS,
   PROJECT_TYPE_OPTIONS,
+  PROJECT_PAYMENT_FILTER_OPTIONS,
 } from "@/features/project/constants/project.constants";
 
 interface ProjectsToolbarProps {
@@ -263,13 +263,6 @@ interface ProjectsToolbarProps {
 }
 
 const ALL = "__all__";
-
-const PAYMENT_STATUS_OPTIONS: { value: PaymentStatus; label: string }[] = [
-  { value: PaymentStatus.DUE, label: "Due" },
-  { value: PaymentStatus.PARTIAL, label: "Partial" },
-  { value: PaymentStatus.ADVANCED, label: "Advanced" },
-  { value: PaymentStatus.COMPLETE, label: "Complete" },
-];
 
 // Adjust to match the fields available on IClient
 const getClientLabel = (client: IClient): string => {
@@ -444,7 +437,7 @@ export function ProjectsToolbar({
             onValueChange={(value) =>
               onUpdateFilters({
                 paymentStatus:
-                  value === ALL ? undefined : (value as PaymentStatus),
+                  value === ALL ? undefined : (value as ProjectFilters["paymentStatus"]),
               })
             }
           >
@@ -453,7 +446,7 @@ export function ProjectsToolbar({
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={ALL}>All Payments</SelectItem>
-              {PAYMENT_STATUS_OPTIONS.map((option) => (
+              {PROJECT_PAYMENT_FILTER_OPTIONS.map((option) => (
                 <SelectItem key={option.value} value={option.value}>
                   {option.label}
                 </SelectItem>
