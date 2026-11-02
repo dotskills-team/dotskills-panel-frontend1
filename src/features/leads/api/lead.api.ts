@@ -155,6 +155,21 @@ convertLead: (
       payload,
     ),
 
+  updateNote: (
+    id: string,
+    noteId: string,
+    payload: AddLeadNotePayload,
+  ) =>
+    apiClient.patch<ApiResponse<ILead>>(
+      `${BASE_URL}/${id}/notes/${noteId}`,
+      payload,
+    ),
+
+  deleteNote: (id: string, noteId: string) =>
+    apiClient.delete<ApiResponse<ILead>>(
+      `${BASE_URL}/${id}/notes/${noteId}`,
+    ),
+
   addAttachment: (
     id: string,
     payload: AddLeadAttachmentPayload,

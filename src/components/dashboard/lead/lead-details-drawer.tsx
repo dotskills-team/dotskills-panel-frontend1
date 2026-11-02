@@ -268,7 +268,7 @@ export function LeadDetailsDrawer({
 
               <TabsContent value="notes" className="flex flex-col gap-4 p-4">
                 <LeadNoteForm leadId={lead._id} />
-                <LeadNotesList notes={lead.notes} />
+                <LeadNotesList leadId={lead._id} notes={lead.notes} />
               </TabsContent>
 
               <TabsContent value="attachments" className="flex flex-col gap-4 p-4">

@@ -31,10 +31,8 @@ const objectIdSchema = z
 
 const phoneSchema = z
   .string({ message: "Phone number is required." })
-  .regex(/^(?:\+880|0)[1-9]\d{7,9}$/, {
-    message:
-      "Phone number must be valid for Bangladesh. Format: +88XXXXXXXXX or 0XXXXXXXXX",
-  });
+  .trim()
+  .min(1, { message: "Phone number is required." });
 
 const nameSchema = (fieldName: string) =>
   z

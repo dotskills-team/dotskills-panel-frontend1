@@ -132,6 +132,33 @@ export const useLeadMutations = () => {
     },
   });
 
+  const updateNote = useMutation({
+    mutationFn: ({
+      id,
+      noteId,
+      payload,
+    }: {
+      id: string;
+      noteId: string;
+      payload: Parameters<typeof leadApi.updateNote>[2];
+    }) => leadApi.updateNote(id, noteId, payload),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: leadKeys.detail(variables.id),
+      });
+    },
+  });
+
+  const deleteNote = useMutation({
+    mutationFn: ({ id, noteId }: { id: string; noteId: string }) =>
+      leadApi.deleteNote(id, noteId),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: leadKeys.detail(variables.id),
+      });
+    },
+  });
+
   const addAttachment = useMutation({
     mutationFn: ({
       id,
@@ -177,6 +204,8 @@ export const useLeadMutations = () => {
     assignLead,
     convertLead,
     addNote,
+    updateNote,
+    deleteNote,
     addAttachment,
     trashLead,
     restoreLead,
