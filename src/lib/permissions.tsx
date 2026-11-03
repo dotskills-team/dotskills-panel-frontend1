@@ -51,7 +51,8 @@ export type PageAccess =
   | "fundTransfer"
   | "payments"
   | "my-accounts"
-  | "my-expenses";
+  | "my-expenses"
+  | "domain-hosting";
 
 export interface Page {
   id: PageAccess;

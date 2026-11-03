@@ -307,7 +307,7 @@ export function ProjectsPageClient() {
     setSort,
     resetFilters,
     activeFilterCount,
-  } = useProjectFilters({ sort: "priority" });
+  } = useProjectFilters({ sort: "-startDate" });
 
   const { data, isLoading, isFetching, isError, error, refetch } =
     useProjects(queryFilters);
@@ -422,7 +422,8 @@ export function ProjectsPageClient() {
           onRetry={() => refetch()}
           hasActiveFilters={activeFilterCount > 0 || Boolean(filters.searchTerm)}
           onClearFilters={resetFilters}
-          sort={filters.sort ?? "priority"}
+          sort={filters.sort ?? "-startDate"}
+          showPriority={false}
           onSortChange={setSort}
           page={meta?.page ?? filters.page ?? 1}
           limit={meta?.limit ?? filters.limit ?? 10}

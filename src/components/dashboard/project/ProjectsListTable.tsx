@@ -237,6 +237,9 @@ interface ProjectsListTableProps {
     /** Columns this page never shows (not even in the Columns menu) */
     hiddenColumns?: ColumnKey[];
 
+    /** false = show a serial number (SL) instead of the priority column */
+    showPriority?: boolean;
+
     /** Selected project ids ({ [_id]: true }). Omit to hide the checkboxes. */
     selection?: Record<string, boolean>;
     onSelectionChange?: (selection: Record<string, boolean>) => void;
@@ -268,6 +271,7 @@ export function ProjectsListTable({
     onDelete,
     permissions,
     hiddenColumns = [],
+    showPriority = true,
     selection,
     onSelectionChange,
 }: ProjectsListTableProps) {
@@ -420,7 +424,7 @@ export function ProjectsListTable({
 
                 {!isLoading &&
                     !isError &&
-                    projects.map((p) => {
+                    projects.map((p, index) => {
                         const due = getDueAmount(p);
 
                         return (
@@ -450,7 +454,11 @@ export function ProjectsListTable({
                                     )}
                                     <div className="min-w-0 flex-1">
                                         <div className="flex flex-wrap items-center gap-2">
-                                            <PriorityBadge priority={p.priority} />
+                                            {showPriority ? (
+                                                <PriorityBadge priority={p.priority} />
+                                            ) : (
+                                                <Badge variant="outline">{startIdx + index + 1}</Badge>
+                                            )}
                                             <p className="min-w-0 truncate text-sm font-medium">{p.name}</p>
                                         </div>
                                         {p.description && (
@@ -553,9 +561,13 @@ export function ProjectsListTable({
                                     />
                                 </TableHead>
                             )}
-                            <TableHead className="w-15 text-xs font-semibold text-white">
-                                <SortableHead field="priority" label="Pri" sort={sort} onSortChange={onSortChange} />
-                            </TableHead>
+                            {showPriority ? (
+                                <TableHead className="w-15 text-xs font-semibold text-white">
+                                    <SortableHead field="priority" label="Pri" sort={sort} onSortChange={onSortChange} />
+                                </TableHead>
+                            ) : (
+                                <TableHead className="w-12 text-xs font-semibold text-white">SL</TableHead>
+                            )}
                             <TableHead className="text-xs font-semibold text-white">
                                 <SortableHead field="name" label="Project" sort={sort} onSortChange={onSortChange} />
                             </TableHead>
@@ -611,7 +623,7 @@ export function ProjectsListTable({
 
                         {!isLoading &&
                             !isError &&
-                            projects.map((p) => {
+                            projects.map((p, index) => {
                                 const due = getDueAmount(p);
 
                                 return (
@@ -632,7 +644,11 @@ export function ProjectsListTable({
                                         )}
 
                                         <TableCell>
-                                            <PriorityBadge priority={p.priority} />
+                                            {showPriority ? (
+                                                <PriorityBadge priority={p.priority} />
+                                            ) : (
+                                                <span className="text-sm text-muted-foreground">{startIdx + index + 1}</span>
+                                            )}
                                         </TableCell>
 
                                         {/* Project name + URLs; wraps instead of forcing width */}
