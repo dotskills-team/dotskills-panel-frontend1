@@ -5,6 +5,7 @@ import { RefreshCw } from "lucide-react";
 
 import { useDashboardOverview } from "@/features/dashboard/hooks/useDashboardOverview";
 import { useCurrentUser } from "@/stores/auth.selectors";
+import { LeaveDashboardWidget } from "@/components/dashboard/leave/leave-dashboard-widget";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -194,6 +195,8 @@ function OverviewContent({
           </div>
         </section>
       )}
+
+      <LeaveDashboardWidget />
 
       {data.kpis.length === 0 && <EmptyState text="No dashboard data for your role yet." />}
     </div>

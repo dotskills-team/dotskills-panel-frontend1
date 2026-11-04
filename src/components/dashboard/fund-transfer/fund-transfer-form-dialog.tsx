@@ -30,6 +30,12 @@ import {
 const money = (value?: number) =>
   new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT" }).format(value ?? 0);
 
+/** Name of an account's owner, when the API populated it. */
+const ownerLabel = (owner: unknown) =>
+  owner && typeof owner === "object"
+    ? `${(owner as { firstName?: string }).firstName ?? ""} ${(owner as { lastName?: string }).lastName ?? ""}`.trim()
+    : "";
+
 const emptyForm = {
   fromAccountId: "",
   toAccountId: "",
@@ -50,13 +56,19 @@ export function FundTransferFormDialog({
   const mutation = useCreateFundTransfer();
   const accountsQuery = useFinancialAccounts({ status: "ACTIVE" as never, limit: 100 }, { enabled: open });
   const accounts = accountsQuery.data?.data ?? [];
+  // The destination can be any member's account, not only the logged-in user's.
+  const allAccountsQuery = useFinancialAccounts(
+    { status: "ACTIVE" as never, limit: 100, scope: "all" },
+    { enabled: open },
+  );
+  const allAccounts = allAccountsQuery.data?.data ?? [];
 
   useEffect(() => {
     if (open) setForm(emptyForm);
   }, [open]);
 
   const fromAccount = accounts.find((a) => a._id === form.fromAccountId);
-  const toAccount = accounts.find((a) => a._id === form.toAccountId);
+  const toAccount = allAccounts.find((a) => a._id === form.toAccountId);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -127,11 +139,12 @@ export function FundTransferFormDialog({
                   <SelectValue placeholder="Select account" />
                 </SelectTrigger>
                 <SelectContent>
-                  {accounts
+                  {allAccounts
                     .filter((a) => a._id !== form.fromAccountId)
                     .map((account) => (
                       <SelectItem key={account._id} value={account._id}>
                         {account.accountName}
+                        {ownerLabel(account.ownerId) ? ` · ${ownerLabel(account.ownerId)}` : ""}
                       </SelectItem>
                     ))}
                 </SelectContent>

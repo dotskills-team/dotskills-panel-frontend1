@@ -84,6 +84,7 @@ const COLOR = {
 /* ------------------------------------------------------------------ */
 const NAV_ICON = {
   dashboard: { icon: "LayoutDashboard", iconColor: COLOR.indigo },
+  leave: { icon: "CalendarDays", iconColor: COLOR.teal },
 
   // Accounts
   expenseCategory: { icon: "Tags", iconColor: COLOR.orange },
@@ -160,7 +161,21 @@ const ADMIN_ACCOUNTS_GROUP: NavGroup = {
   ],
 };
 
-export const navigationConfig: Record<UserRole, NavGroup[]> = {
+/** Every role can request leave; approver-only tabs are hidden inside the page. */
+const LEAVE_GROUP: NavGroup = {
+  label: "Leave",
+  items: [
+    {
+      id: "leave",
+      label: "Leave",
+      href: "/dashboard/leave",
+      description: "Leave requests, balance and approvals",
+      ...NAV_ICON.leave,
+    },
+  ],
+};
+
+const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
   SUPER_ADMIN: [
     {
       label: "Overview",
@@ -524,3 +539,6 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
     MY_FINANCE_GROUP,
   ],
 };
+export const navigationConfig: Record<UserRole, NavGroup[]> = Object.fromEntries(
+  Object.entries(baseNavigationConfig).map(([role, groups]) => [role, [...groups, LEAVE_GROUP]]),
+) as Record<UserRole, NavGroup[]>;

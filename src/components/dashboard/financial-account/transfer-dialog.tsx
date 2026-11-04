@@ -27,6 +27,12 @@ import {
 const money = (v?: number) =>
   new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT" }).format(v ?? 0);
 
+/** Name of an account's owner, when the API populated it. */
+const ownerLabel = (owner: unknown) =>
+  owner && typeof owner === "object"
+    ? `${(owner as { firstName?: string }).firstName ?? ""} ${(owner as { lastName?: string }).lastName ?? ""}`.trim()
+    : "";
+
 const today = () => new Date().toISOString().slice(0, 10);
 
 const initial = {
@@ -51,6 +57,12 @@ export function TransferDialog({
     { enabled: open },
   );
   const accounts = accountsQuery.data?.data ?? [];
+  // The destination can be any member's account, not only the logged-in user's.
+  const allAccountsQuery = useFinancialAccounts(
+    { limit: 100, status: "ACTIVE", scope: "all" } as never,
+    { enabled: open },
+  );
+  const allAccounts = allAccountsQuery.data?.data ?? [];
 
   useEffect(() => {
     if (open) setForm({ ...initial, transferDate: today() });
@@ -126,11 +138,12 @@ export function TransferDialog({
                   <SelectValue placeholder="Select account" />
                 </SelectTrigger>
                 <SelectContent>
-                  {accounts
+                  {allAccounts
                     .filter((a) => a._id !== form.fromAccountId)
                     .map((a) => (
                       <SelectItem key={a._id} value={a._id}>
-                        {a.accountName} ({money(a.currentBalance)})
+                        {a.accountName}
+                        {ownerLabel(a.ownerId) ? ` · ${ownerLabel(a.ownerId)}` : ""} ({money(a.currentBalance)})
                       </SelectItem>
                     ))}
                 </SelectContent>

@@ -52,7 +52,8 @@ export type PageAccess =
   | "payments"
   | "my-accounts"
   | "my-expenses"
-  | "domain-hosting";
+  | "domain-hosting"
+  | "leave";
 
 export interface Page {
   id: PageAccess;
