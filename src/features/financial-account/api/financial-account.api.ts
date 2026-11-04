@@ -264,8 +264,12 @@ export async function createFinancialAccount(
   });
 }
 
-export async function getFinancialAccountSummary(): Promise<FinancialAccountSummaryResponse> {
-  return request<FinancialAccountSummaryResponse>(`${BASE_URL}/summary`);
+export async function getFinancialAccountSummary(
+  scope?: "all",
+): Promise<FinancialAccountSummaryResponse> {
+  return request<FinancialAccountSummaryResponse>(
+    `${BASE_URL}/summary${scope ? `?scope=${scope}` : ""}`,
+  );
 }
 
 export async function updateFinancialAccount(

@@ -204,10 +204,13 @@ export function useDeleteFinancialAccount() {
   });
 }
 
-export function useFinancialAccountSummary(options?: { enabled?: boolean }) {
+export function useFinancialAccountSummary(options?: {
+  enabled?: boolean;
+  scope?: "all";
+}) {
   return useQuery({
-    queryKey: financialAccountKeys.summary(),
-    queryFn: () => getFinancialAccountSummary(),
+    queryKey: [...financialAccountKeys.summary(), options?.scope ?? "mine"],
+    queryFn: () => getFinancialAccountSummary(options?.scope),
     enabled: options?.enabled ?? true,
   });
 }

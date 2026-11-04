@@ -246,6 +246,12 @@ export function AccountBalanceCard({
 
   const type = String(account.accountType).toUpperCase();
 
+  const owner = account.ownerId;
+  const ownerLabel =
+    owner && typeof owner === "object"
+      ? `${owner.firstName ?? ""} ${owner.lastName ?? ""}`.trim()
+      : "";
+
   // Icon account type onujayi
   let Icon = Wallet;
   if (type.includes("BANK")) {
@@ -296,6 +302,7 @@ export function AccountBalanceCard({
               </p>
               <p className="mt-0.5 truncate text-[11px] text-white/75">
                 {accountType}
+                {ownerLabel ? ` · ${ownerLabel}` : ""}
               </p>
             </div>
           </div>
@@ -395,6 +402,7 @@ export function FinancialAccountPageClient() {
         accountType === "ALL" ? undefined : (accountType as never),
       status: status === "ALL" ? undefined : (status as never),
       sort,
+      scope: "all" as const, // admins see their own + all members' accounts
     }),
     [page, limit, search, accountType, status, sort],
   );
@@ -409,7 +417,7 @@ export function FinancialAccountPageClient() {
   const rows = list.data?.data ?? [];
   const meta = list.data?.meta;
 
-  const summary = useFinancialAccountSummary();
+  const summary = useFinancialAccountSummary({ scope: "all" });
   const stats = summary.data?.data;
 
   const totalBalance = rows.reduce(

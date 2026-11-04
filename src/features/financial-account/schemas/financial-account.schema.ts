@@ -55,6 +55,8 @@ export const financialAccountQuerySchema = z.object({
     .optional(),
   status: z.enum([AccountStatus.ACTIVE, AccountStatus.INACTIVE]).optional(),
   sort: z.string().optional(),
+  // "all" is honoured for admins only (every member's accounts)
+  scope: z.enum(["all"]).optional(),
 });
 
 export type CreateFinancialAccountInput = z.infer<typeof createFinancialAccountSchema>;
