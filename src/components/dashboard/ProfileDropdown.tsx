@@ -62,17 +62,7 @@ export function ProfileDropdown() {
           {/*  </Link>*/}
           {/*</DropdownMenuItem>*/}
           <DropdownMenuItem
-            onClick={() => {
-              const role = user?.role;
-
-              if (role === "ADMIN" || role === "MANAGER") {
-                setSelectedUser(user || null);
-                setOpenViewModal(true);
-              } else {
-                setSelectedUser(user || null);
-                setOpenViewModal(true);
-              }
-            }}
+            onClick={() => router.push("/dashboard/profile")}
           >
             <User2 />
             Profile

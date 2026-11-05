@@ -44,13 +44,9 @@ export function AuthLayout({ children }: AuthLayoutProps) {
       </aside>
 
       <div className="flex flex-1 flex-col">
-        <div className="flex items-center px-6 pt-6 sm:px-10 sm:pt-8 lg:hidden">
-          <AuthHeader />
-        </div>
-
-        <main className="flex flex-1 flex-col items-center justify-center px-6 py-10 sm:px-10">
-          <div className="w-full max-w-105 space-y-8">
-            <div className="hidden lg:block">
+        <main className="flex flex-1 flex-col items-center justify-center px-6 py-8 sm:px-10 sm:py-10">
+          <div className="w-full max-w-105 space-y-4 sm:space-y-6">
+            <div className="flex justify-center">
               <AuthHeader />
             </div>
 

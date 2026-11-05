@@ -62,7 +62,7 @@ export function AuthHeader({ className, variant = "default" }: AuthHeaderProps) 
         height={300}
         priority
         className={cn(
-          "relative h-40 w-40 select-none object-contain sm:h-24 sm:w-24 animate-loader-breathe will-change-transform",
+          "relative h-24 w-24 select-none object-contain sm:h-28 sm:w-28 animate-loader-breathe will-change-transform",
           // Logo is white: keep as-is on dark surfaces, turn black on light mode
           !isInverted && "invert dark:invert-0",
         )}

@@ -57,9 +57,14 @@ async me(): Promise<User> {
     );
   }
 
-  updateProfile(payload: Partial<User>) {
-    return apiClient.patch<ApiResponse<User>>(
-      "/user/update-profile",
+  /** Updates the logged-in user's name / avatar. Send FormData when uploading an image. */
+  updateProfile(payload: FormData | Partial<User>) {
+    return apiClient.patch<ApiResponse<User>>("/user/me", payload);
+  }
+
+  changePassword(payload: { oldPassword: string; newPassword: string }) {
+    return apiClient.patch<ApiResponse<null>>(
+      "/user/change-password",
       payload,
     );
   }

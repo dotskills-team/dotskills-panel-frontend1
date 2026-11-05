@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { LogOut, Settings, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +12,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useCurrentUser } from "@/hooks/auth/useCurrentUser";
 import { formatRole } from "@/lib/dashboard-utils";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export function UserMenu() {
   const { data: user, isLoading } = useCurrentUser();
@@ -40,6 +41,7 @@ export function UserMenu() {
           title={`${userName} - ${userRole}`}
         >
           <Avatar className="h-9 w-9 border border-border">
+            <AvatarImage className="object-cover" src={user.avatar} alt={userName} />
             <AvatarFallback className="bg-primary/10 text-primary font-semibold">
               {initials}
             </AvatarFallback>
@@ -59,9 +61,11 @@ export function UserMenu() {
 
         <DropdownMenuSeparator />
 
-        <DropdownMenuItem className="gap-2 cursor-pointer">
-          <User className="h-4 w-4" />
-          <span>Profile</span>
+        <DropdownMenuItem asChild className="gap-2 cursor-pointer">
+          <Link href="/dashboard/profile">
+            <User className="h-4 w-4" />
+            <span>Profile</span>
+          </Link>
         </DropdownMenuItem>
 
         <DropdownMenuItem className="gap-2 cursor-pointer">
