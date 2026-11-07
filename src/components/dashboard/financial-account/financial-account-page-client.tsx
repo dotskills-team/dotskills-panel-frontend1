@@ -35,6 +35,7 @@ import {
 
 import type { IFinancialAccount } from "@/types/financial-account.types";
 import { cn } from "@/lib/utils";
+import { FinanceStatCard } from "@/components/dashboard/my-finance/FinanceStatCard";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -70,59 +71,6 @@ const money = (value?: number) =>
 /*                              Summary Stat Card                             */
 /* -------------------------------------------------------------------------- */
 
-function StatCard({
-  title,
-  value,
-  caption,
-  icon: Icon,
-  className,
-  iconClassName,
-}: {
-  title: string;
-  value: string;
-  caption: string;
-  icon: typeof Wallet;
-  className: string;
-  iconClassName: string;
-}) {
-  return (
-    <Card
-      className={cn(
-        "group relative overflow-hidden rounded-2xl border-0 text-white shadow-sm",
-        "transition-all duration-300",
-        "hover:-translate-y-1 hover:shadow-xl",
-        className,
-      )}
-    >
-      {/* Decorative Circle */}
-      <div className="absolute -right-8 -top-8 size-28 rounded-full bg-white/10 transition-transform duration-500 group-hover:scale-125" />
-
-      <CardContent className="relative flex items-center gap-4 p-4 sm:p-5">
-        <div
-          className={cn(
-            "flex size-12 shrink-0 items-center justify-center rounded-xl",
-            "bg-white/15 backdrop-blur-sm",
-            iconClassName,
-          )}
-        >
-          <Icon className="size-6" />
-        </div>
-
-        <div className="min-w-0">
-          <p className="text-xs font-medium text-white/75">{title}</p>
-
-          <p className="mt-1 truncate text-xl font-bold tracking-tight sm:text-2xl">
-            {value}
-          </p>
-
-          <p className="mt-0.5 truncate text-[11px] text-white/65">
-            {caption}
-          </p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
 
 /* -------------------------------------------------------------------------- */
 /*                          Account Balance Card                              */
@@ -548,41 +496,41 @@ export function FinancialAccountPageClient() {
       {/*                         Summary Statistics                          */}
       {/* ------------------------------------------------------------------ */}
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-3 xl:grid-cols-4">
+        <FinanceStatCard
           title="Total Current Balance"
           value={money(stats?.totalCurrentBalance)}
           caption="Current balance across accounts"
           icon={Wallet}
-          className="bg-linear-to-br from-blue-600 to-indigo-600 shadow-blue-500/20"
-          iconClassName="text-blue-100"
+          tone="text-blue-100"
+          gradient="from-blue-600 to-indigo-600"
         />
 
-        <StatCard
+        <FinanceStatCard
           title="Total Accounts"
           value={String(meta?.total ?? rows.length)}
           caption="All financial accounts"
           icon={WalletCards}
-          className="bg-linear-to-br from-violet-600 to-purple-600 shadow-violet-500/20"
-          iconClassName="text-violet-100"
+          tone="text-violet-100"
+          gradient="from-violet-600 to-purple-600"
         />
 
-        <StatCard
+        <FinanceStatCard
           title="Active Accounts"
           value={String(activeCount)}
           caption="Currently active accounts"
           icon={Landmark}
-          className="bg-linear-to-br from-emerald-500 to-teal-600 shadow-emerald-500/20"
-          iconClassName="text-emerald-100"
+          tone="text-emerald-100"
+          gradient="from-emerald-500 to-teal-600"
         />
 
-        <StatCard
+        <FinanceStatCard
           title="Total Opening Balance"
                    value={money(stats?.totalOpeningBalance)}
           caption="Opening balance across accounts"
           icon={Banknote}
-          className="bg-linear-to-br from-cyan-500 to-blue-600 shadow-cyan-500/20"
-          iconClassName="text-cyan-100"
+          tone="text-cyan-100"
+          gradient="from-cyan-500 to-blue-600"
         />
 
       </div>

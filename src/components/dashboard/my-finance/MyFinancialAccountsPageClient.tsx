@@ -32,7 +32,7 @@ export function MyFinancialAccountsPageClient() {
         </p>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-3 xl:grid-cols-4">
         <FinanceStatCard
           title="Total Balance"
           value={formatMoney(totalBalance)}

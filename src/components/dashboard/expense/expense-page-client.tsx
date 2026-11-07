@@ -20,7 +20,7 @@ import { useExpenseCategories } from "@/features/expense-category/hooks/use-expe
 import { useFinancialAccounts } from "@/features/financial-account/hooks/use-financial-account";
 import { EXPENSE_SORT_OPTIONS } from "@/features/expense/constants/expense.constant";
 import type { IExpense } from "@/types/expense.types";
-import { cn } from "@/lib/utils";
+import { FinanceStatCard } from "@/components/dashboard/my-finance/FinanceStatCard";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -54,67 +54,6 @@ const nameOf = (value: unknown, key: string) => {
   return (value as Record<string, string>)[key] ?? "—";
 };
 
-function StatCard({
-  title,
-  value,
-  caption,
-  icon: Icon,
-  tone,
-  gradient,
-}: {
-  title: string;
-  value: string;
-  caption: string;
-  icon: typeof Receipt;
-  tone: string;
-  gradient: string;
-}) {
-  return (
-    <Card
-      className={cn(
-        "group relative overflow-hidden rounded-2xl border-0",
-        "bg-linear-to-br text-white shadow-lg",
-        "transition-all duration-300",
-        "hover:-translate-y-1 hover:shadow-xl",
-        gradient,
-      )}
-    >
-      {/* Decorative background */}
-      <div className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-white/10 transition-transform duration-500 group-hover:scale-125" />
-
-      <div className="pointer-events-none absolute -bottom-12 -left-8 size-28 rounded-full bg-black/5" />
-
-      <CardContent className="relative flex items-center gap-4 p-5">
-        {/* Icon */}
-        <div
-          className={cn(
-            "flex size-12 shrink-0 items-center justify-center rounded-xl",
-            "bg-white/15 backdrop-blur-sm",
-            "ring-1 ring-white/10",
-            tone,
-          )}
-        >
-          <Icon className="size-6" strokeWidth={2.2} />
-        </div>
-
-        {/* Content */}
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-medium text-white/75">
-            {title}
-          </p>
-
-          <p className="mt-1 truncate text-2xl font-bold tracking-tight">
-            {value}
-          </p>
-
-          <p className="mt-1 truncate text-[11px] text-white/65">
-            {caption}
-          </p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
 
 export function ExpensePageClient() {
   const [search, setSearch] = useState("");
@@ -217,8 +156,8 @@ export function ExpensePageClient() {
         </Button>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        <StatCard
+      <div className="grid grid-cols-2 gap-2 sm:gap-3">
+        <FinanceStatCard
           title="Total Expenses"
           value={String(meta?.total ?? rows.length)}
           caption="All expense records"
@@ -227,7 +166,7 @@ export function ExpensePageClient() {
           gradient="from-blue-600 via-indigo-600 to-violet-600"
         />
 
-        <StatCard
+        <FinanceStatCard
           title="Total Amount"
           value={money(totalAmount)}
           caption="Sum on this page"

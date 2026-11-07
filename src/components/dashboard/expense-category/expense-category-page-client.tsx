@@ -22,7 +22,7 @@ import {
   EXPENSE_CATEGORY_SORT_OPTIONS,
 } from "@/features/expense-category/constants/expense-category.constant";
 import type { IExpenseCategory } from "@/types/expense-category.types";
-import { cn } from "@/lib/utils";
+import { FinanceStatCard } from "@/components/dashboard/my-finance/FinanceStatCard";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -67,54 +67,6 @@ import { ExpenseCategoryFormDialog } from "./expense-category-form-dialog";
 //     </Card>
 //   );
 // }
-function StatCard({
-  title,
-  value,
-  caption,
-  icon: Icon,
-  tone,
-}: {
-  title: string;
-  value: string;
-  caption: string;
-  icon: typeof Tags;
-  tone: string;
-}) {
-  return (
-    <Card
-      className={cn(
-        "group relative overflow-hidden rounded-2xl border-0 shadow-sm",
-        "transition-all duration-300 hover:-translate-y-1 hover:shadow-lg",
-        tone,
-      )}
-    >
-      <CardContent className="relative flex items-center gap-4 p-5">
-        {/* Decorative background */}
-        <div className="absolute -right-8 -top-8 size-24 rounded-full bg-white/20 blur-2xl transition-transform duration-500 group-hover:scale-150" />
-
-        {/* Icon */}
-        <div className="relative flex size-12 shrink-0 items-center justify-center rounded-xl bg-white/20 text-white shadow-sm backdrop-blur-sm">
-          <Icon className="size-6" strokeWidth={2} />
-        </div>
-
-        {/* Content */}
-        <div className="relative min-w-0 text-white">
-          <p className="text-xs font-medium text-white/80">
-            {title}
-          </p>
-
-          <p className="mt-1 text-2xl font-bold tracking-tight">
-            {value}
-          </p>
-
-          <p className="mt-0.5 truncate text-xs text-white/75">
-            {caption}
-          </p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
 export function ExpenseCategoryPageClient() {
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState("ALL");
@@ -197,21 +149,23 @@ export function ExpenseCategoryPageClient() {
         </Button>
       </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-2">
-        <StatCard
+      <div className="grid grid-cols-2 gap-2 sm:gap-3">
+        <FinanceStatCard
           title="Total Categories"
           value={String(meta?.total ?? rows.length)}
           caption="All expense categories"
           icon={FolderKanban}
-          tone="bg-gradient-to-br from-indigo-600 via-blue-600 to-cyan-500"
+          tone="text-white"
+          gradient="from-indigo-600 via-blue-600 to-cyan-500"
         />
 
-        <StatCard
+        <FinanceStatCard
           title="Active Categories"
           value={String(activeCount)}
           caption="Currently active"
           icon={Tags}
-          tone="bg-gradient-to-br from-emerald-500 via-green-500 to-teal-500"
+          tone="text-white"
+          gradient="from-emerald-500 via-green-500 to-teal-500"
         />
       </div>
 

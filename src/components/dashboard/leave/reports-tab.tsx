@@ -1,8 +1,9 @@
 "use client";
+import { FinanceStatCard } from "@/components/dashboard/my-finance/FinanceStatCard";
 
 import { useState } from "react";
 import { toast } from "sonner";
-import { BarChart3, FileSpreadsheet, FileText, Loader2 } from "lucide-react";
+import { AlertTriangle, BarChart3, CalendarDays, FileSpreadsheet, FileText, Loader2, Users } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -148,25 +149,10 @@ export function ReportsTab() {
         </div>
       ) : (
         <>
-          <div className="grid gap-3 sm:grid-cols-3">
-            <Card>
-              <CardContent className="p-4">
-                <p className="text-xs text-muted-foreground">Leave days taken</p>
-                <p className="mt-1 text-2xl font-bold">{fmt(report.totals.totalDays)}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4">
-                <p className="text-xs text-muted-foreground">Extra (over-balance) days</p>
-                <p className="mt-1 text-2xl font-bold text-red-600">{fmt(report.totals.extraDays)}</p>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-4">
-                <p className="text-xs text-muted-foreground">Staff with leave</p>
-                <p className="mt-1 text-2xl font-bold">{report.rows.length}</p>
-              </CardContent>
-            </Card>
+          <div className="grid grid-cols-3 gap-2 sm:gap-3">
+            <FinanceStatCard title="Leave days" value={fmt(report.totals.totalDays)} caption="Leave days taken" icon={CalendarDays} tone="text-blue-100" gradient="from-blue-600 via-indigo-600 to-violet-600" />
+            <FinanceStatCard title="Extra days" value={fmt(report.totals.extraDays)} caption="Over-balance days" icon={AlertTriangle} tone="text-rose-100" gradient="from-rose-500 via-pink-600 to-fuchsia-600" />
+            <FinanceStatCard title="Staff" value={String(report.rows.length)} caption="Staff with leave" icon={Users} tone="text-violet-100" gradient="from-violet-600 via-purple-600 to-fuchsia-700" />
           </div>
 
           {extraByType.length > 0 && (

@@ -373,7 +373,7 @@ export function PremiumSidebar({
         >
           <div className="flex h-8 items-center pl-0 pr-6">
             <Image
-              src="/assets/dotskills-logo-sidebar-black.png"
+              src="/assets/dotskills-logo-sidebar-removebg-preview.png"
               alt="DotSkills Panel"
               width={180}
               height={45}

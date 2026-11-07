@@ -14,10 +14,12 @@ interface FinanceStatCardProps {
   tone: string;
   /** Background gradient classes, e.g. "from-blue-600 via-indigo-600 to-violet-600". */
   gradient: string;
+  /** Shows a skeleton in place of the value. */
+  loading?: boolean;
 }
 
 /** Gradient stat card, same design as the stats on the admin Expenses page. */
-export function FinanceStatCard({ title, value, caption, icon: Icon, tone, gradient }: FinanceStatCardProps) {
+export function FinanceStatCard({ title, value, caption, icon: Icon, tone, gradient, loading }: FinanceStatCardProps) {
   return (
     <Card
       className={cn(
@@ -31,21 +33,21 @@ export function FinanceStatCard({ title, value, caption, icon: Icon, tone, gradi
       <div className="pointer-events-none absolute -right-10 -top-10 size-32 rounded-full bg-white/10 transition-transform duration-500 group-hover:scale-125" />
       <div className="pointer-events-none absolute -bottom-12 -left-8 size-28 rounded-full bg-black/5" />
 
-      <CardContent className="relative flex items-center gap-4 p-5">
+      <CardContent className="relative flex flex-col items-start gap-1.5 p-2.5 sm:flex-row sm:items-center sm:gap-4 sm:p-5">
         <div
           className={cn(
-            "flex size-12 shrink-0 items-center justify-center rounded-xl",
+            "flex size-7 shrink-0 items-center justify-center rounded-lg sm:size-12 sm:rounded-xl",
             "bg-white/15 backdrop-blur-sm ring-1 ring-white/10",
             tone,
           )}
         >
-          <Icon className="size-6" strokeWidth={2.2} />
+          <Icon className="size-3.5 sm:size-6" strokeWidth={2.2} />
         </div>
 
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-medium text-white/75">{title}</p>
-          <p className="mt-1 truncate text-2xl font-bold tracking-tight">{value}</p>
-          <p className="mt-1 truncate text-[11px] text-white/65">{caption}</p>
+        <div className="min-w-0 w-full flex-1">
+          <p className="truncate text-[10px] font-medium leading-tight text-white/75 sm:text-xs">{title}</p>
+          <p className="mt-0.5 truncate text-sm font-bold tracking-tight sm:mt-1 sm:text-2xl">{loading ? <span className="inline-block h-4 w-12 animate-pulse rounded bg-white/30 sm:h-7 sm:w-20" /> : value}</p>
+          <p className="mt-0.5 hidden truncate text-[11px] text-white/65 sm:mt-1 sm:block">{caption}</p>
         </div>
       </CardContent>
     </Card>

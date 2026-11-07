@@ -54,10 +54,11 @@ export default function AppLoader({
             className="absolute inset-0 rounded-full bg-slate-500/80 blur-xl animate-loader-pulse-glow"
           />
           <Image
-            src="/assets/dotskills-logo-loading-black.jpg"
-            alt="DotSkills Panel"
-            width={300}
-            height={300}
+            // src="/assets/dotskills-logo-loading-black.jpg"
+            src="/assets/dotskills-logo-loading-black.png"
+            alt="DotSkills Panel loader"
+            width={320}
+            height={320}
             priority
             className="relative rounded-full h-30 w-30 select-none object-contain sm:h-24 sm:w-24 animate-loader-breathe will-change-transform"
           />

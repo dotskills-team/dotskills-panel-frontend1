@@ -1,4 +1,5 @@
 "use client";
+import { FinanceStatCard } from "@/components/dashboard/my-finance/FinanceStatCard";
 
 import {
   BadgeCheck,
@@ -232,41 +233,12 @@ export function LeadsStats({ stats, isLoading }: LeadsStatsProps) {
   return (
     <div className="flex flex-col gap-3">
       {/* Overview — headline numbers (Total, Converted, Rate + Website, Software) */}
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        <StatCard
-          label="Total Leads"
-          value={totalCount.toLocaleString()}
-          icon={<Users className="h-4 w-4 text-white" />}
-          gradientClassName="bg-gradient-to-br from-blue-500 to-blue-700"
-          isLoading={isLoading}
-        />
-        <StatCard
-          label="Converted"
-          value={convertedCount.toLocaleString()}
-          icon={<CheckCircle2 className="h-4 w-4 text-white" />}
-          gradientClassName="bg-gradient-to-br from-green-500 to-green-700"
-          isLoading={isLoading}
-        />
-        <StatCard
-          label="Conversion Rate"
-          value={`${conversionRate.toFixed(1)}%`}
-          icon={<TrendingUp className="h-4 w-4 text-white" />}
-          gradientClassName="bg-gradient-to-br from-amber-500 to-orange-600"
-          isLoading={isLoading}
-        />
-        {Object.values(LeadType).map((leadType) => {
-          const config = LEAD_TYPE_CONFIG[leadType];
-          return (
-            <StatCard
-              key={leadType}
-              label={config.label}
-              value={(stats?.leadTypeCounts?.[leadType] ?? 0).toLocaleString()}
-              icon={config.icon}
-              gradientClassName={config.gradientClassName}
-              isLoading={isLoading}
-            />
-          );
-        })}
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-5">
+        <FinanceStatCard title="Total Leads" value={totalCount.toLocaleString()} caption="All leads" icon={Users} tone="text-blue-100" gradient="from-blue-600 via-indigo-600 to-violet-600" loading={isLoading} />
+        <FinanceStatCard title="Converted" value={convertedCount.toLocaleString()} caption="Won leads" icon={CheckCircle2} tone="text-emerald-100" gradient="from-emerald-500 via-teal-600 to-cyan-700" loading={isLoading} />
+        <FinanceStatCard title="Conversion Rate" value={`${conversionRate.toFixed(1)}%`} caption="Leads converted" icon={TrendingUp} tone="text-amber-100" gradient="from-amber-500 via-orange-500 to-orange-600" loading={isLoading} />
+        <FinanceStatCard title="Website" value={(stats?.leadTypeCounts?.[LeadType.WEBSITE] ?? 0).toLocaleString()} caption="Website leads" icon={Globe} tone="text-rose-100" gradient="from-rose-500 via-pink-600 to-fuchsia-600" loading={isLoading} />
+        <FinanceStatCard title="Software" value={(stats?.leadTypeCounts?.[LeadType.SOFTWARE] ?? 0).toLocaleString()} caption="Software leads" icon={Code2} tone="text-violet-100" gradient="from-violet-600 via-purple-600 to-fuchsia-700" loading={isLoading} />
       </div>
 
       {/* Row 1: Lead status pills */}

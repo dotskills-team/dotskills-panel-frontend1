@@ -1,7 +1,8 @@
 "use client";
+import { FinanceStatCard } from "@/components/dashboard/my-finance/FinanceStatCard";
 
 import { useState } from "react";
-import { ArrowLeft, ArrowRight, Wallet } from "lucide-react";
+import { ArrowLeft, ArrowRight, Banknote, Receipt, Wallet } from "lucide-react";
 
 import {
     useFinancialAccounts,
@@ -170,40 +171,45 @@ export function PaymentsPageClient() {
             </Card>
 
             {/* Summary */}
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <Card className="bg-slate-100 dark:bg-slate-950">
-                    <CardContent className="p-4">
-                        <p className="text-xs text-muted-foreground">Total Amount</p>
-                        <p className="text-xl font-bold">{money(summary?.totalAmount)}</p>
-                    </CardContent>
-                </Card>
-                <Card className="bg-slate-100 dark:bg-slate-950">
-                    <CardContent className="p-4">
-                        <p className="text-xs text-muted-foreground">Total Payments</p>
-                        <p className="text-xl font-bold">{summary?.totalPayments ?? 0}</p>
-                    </CardContent>
-                </Card>
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4">
+                <FinanceStatCard title="Total Amount" value={money(summary?.totalAmount)} caption="All received payments" icon={Banknote} tone="text-blue-100" gradient="from-blue-600 via-indigo-600 to-violet-600" />
+                <FinanceStatCard title="Total Payments" value={String(summary?.totalPayments ?? 0)} caption="Payment records" icon={Receipt} tone="text-emerald-100" gradient="from-emerald-500 via-teal-600 to-cyan-700" />
 
-                {byAccount.map((acc) => (
-                    <Card
-                        key={acc._id}
-                        onClick={() => {
-                            setAccountId(acc._id);
-                            resetPage();
-                        }}
-                        className="cursor-pointer bg-slate-100 transition hover:scale-[1.02] dark:bg-slate-950"
-                    >
-                        <CardContent className="p-4">
-                            <p className="truncate text-xs text-muted-foreground">
-                                {acc.accountName} · {acc.paymentCount} payments
-                            </p>
-                            <p className="text-xl font-bold">{money(acc.totalReceived)}</p>
-                            <p className="text-xs text-muted-foreground">
-                                Balance: {money(acc.currentBalance)}
-                            </p>
-                        </CardContent>
-                    </Card>
-                ))}
+                {byAccount.map((acc, i) => {
+                    const palette = [
+                        ["text-amber-100", "from-amber-500 via-orange-500 to-orange-600"],
+                        ["text-rose-100", "from-rose-500 via-pink-600 to-fuchsia-600"],
+                        ["text-violet-100", "from-violet-600 via-purple-600 to-fuchsia-700"],
+                        ["text-blue-100", "from-blue-600 via-indigo-600 to-violet-600"],
+                    ][i % 4];
+                    return (
+                        <div
+                            key={acc._id}
+                            role="button"
+                            tabIndex={0}
+                            onClick={() => {
+                                setAccountId(acc._id);
+                                resetPage();
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === "Enter") {
+                                    setAccountId(acc._id);
+                                    resetPage();
+                                }
+                            }}
+                            className="min-w-0 cursor-pointer"
+                        >
+                            <FinanceStatCard
+                                title={acc.accountName}
+                                value={money(acc.totalReceived)}
+                                caption={`${acc.paymentCount} payments · Balance: ${money(acc.currentBalance)}`}
+                                icon={Wallet}
+                                tone={palette[0]}
+                                gradient={palette[1]}
+                            />
+                        </div>
+                    );
+                })}
             </div>
 
             {/* Table */}

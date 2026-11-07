@@ -121,12 +121,13 @@ export default function NotFound() {
             DotSkills <span className="text-muted-foreground">Panel</span>
           </span> */}
           <Image
-            src="/assets/dotskills-logo-sidebar-black.png"
-            alt="DotSkills Panel"
+            // src="/assets/dotskills-logo-sidebar-black.png"
+            src="/assets/dotskills-logo-loading-black.png"
+            alt="DotSkills Panel not found"
             width={180}
-            height={45}
+            height={180}
             priority
-            className="h-12 w-auto select-none object-contain dark:invert"
+            className="h-30 w-auto select-none object-contain dark:invert"
           />
         </Link>
 

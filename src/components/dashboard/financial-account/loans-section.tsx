@@ -1,8 +1,9 @@
 "use client";
+import { FinanceStatCard } from "@/components/dashboard/my-finance/FinanceStatCard";
 
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { ArrowLeft, ArrowRight, HandCoins, Pencil, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, Clock, HandCoins, Pencil, Trash2 } from "lucide-react";
 
 import {
   useDeleteLoan,
@@ -481,27 +482,10 @@ export function LoansSection() {
         <Badge variant="outline">{s?.activeCount ?? 0} active</Badge>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-xs text-muted-foreground">Total Borrowed</p>
-            <p className="mt-1 text-lg font-semibold">{money(s?.totalBorrowed)}</p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-xs text-muted-foreground">Total Repaid</p>
-            <p className="mt-1 text-lg font-semibold text-emerald-600">
-              {money(s?.totalRepaid)}
-            </p>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="p-4">
-            <p className="text-xs text-muted-foreground">Still Owed</p>
-            <p className="mt-1 text-lg font-semibold text-amber-600">{money(s?.totalDue)}</p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-3 gap-2 sm:gap-3">
+        <FinanceStatCard title="Total Borrowed" value={money(s?.totalBorrowed)} caption="Money taken" icon={HandCoins} tone="text-blue-100" gradient="from-blue-600 via-indigo-600 to-violet-600" />
+        <FinanceStatCard title="Total Repaid" value={money(s?.totalRepaid)} caption="Paid back so far" icon={CheckCircle2} tone="text-emerald-100" gradient="from-emerald-500 via-teal-600 to-cyan-700" />
+        <FinanceStatCard title="Still Owed" value={money(s?.totalDue)} caption="Remaining to repay" icon={Clock} tone="text-amber-100" gradient="from-amber-500 via-orange-500 to-orange-600" />
       </div>
 
       <Card className="overflow-hidden p-0">

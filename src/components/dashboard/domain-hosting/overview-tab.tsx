@@ -2,7 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { addDays, format } from "date-fns";
-import { AlertCircle, BellRing, Eye, Phone, RefreshCw } from "lucide-react";
+import { AlertCircle, AlertTriangle, BellRing, CheckCircle2, Clock, Eye, Phone, RefreshCw, type LucideIcon } from "lucide-react";
+import { FinanceStatCard } from "@/components/dashboard/my-finance/FinanceStatCard";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -50,18 +51,20 @@ function SummaryCard({
 }: {
   title: string;
   value: number | string;
-  accent: string;
+  accent: [string, string, LucideIcon];
   hint: string;
   loading: boolean;
 }) {
   return (
-    <Card className={cn("border-l-4 py-4", accent)}>
-      <CardContent className="space-y-1">
-        <p className="text-sm text-muted-foreground">{title}</p>
-        {loading ? <Skeleton className="h-8 w-16" /> : <p className="text-3xl font-semibold tabular-nums">{value}</p>}
-        <p className="text-xs text-muted-foreground">{hint}</p>
-      </CardContent>
-    </Card>
+    <FinanceStatCard
+      title={title}
+      value={String(value)}
+      caption={hint}
+      icon={accent[2]}
+      tone={accent[0]}
+      gradient={accent[1]}
+      loading={loading}
+    />
   );
 }
 
@@ -156,39 +159,39 @@ export function OverviewTab({ canWrite, onView, onRenew, onLogContact, onOpenRem
   return (
     <div className="space-y-6">
       {/* ------------------------------ Summary cards ------------------------------ */}
-      <div className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 lg:grid-cols-5">
         <SummaryCard
           title="Expired"
           value={summary?.expired ?? 0}
-          accent="border-l-red-500"
+          accent={["text-rose-100", "from-rose-500 via-pink-600 to-fuchsia-600", AlertTriangle]}
           hint="Past expiry date"
           loading={summaryLoading}
         />
         <SummaryCard
           title="Expiring in 7 days"
           value={summary?.expiringWithin7Days ?? 0}
-          accent="border-l-orange-500"
+          accent={["text-orange-100", "from-orange-500 via-orange-600 to-red-600", Clock]}
           hint="Within the next 7 days"
           loading={summaryLoading}
         />
         <SummaryCard
           title="Expiring in 15 days"
           value={summary?.expiringWithin15Days ?? 0}
-          accent="border-l-yellow-500"
+          accent={["text-yellow-100", "from-yellow-500 via-amber-500 to-orange-500", Clock]}
           hint="Within the next 15 days"
           loading={summaryLoading}
         />
         <SummaryCard
           title="Expiring in 30 days"
           value={summary?.expiringWithin30Days ?? 0}
-          accent="border-l-amber-400"
+          accent={["text-amber-100", "from-amber-500 via-yellow-600 to-orange-600", Clock]}
           hint="Within the next 30 days"
           loading={summaryLoading}
         />
         <SummaryCard
           title="Active"
           value={summary?.totalActive ?? 0}
-          accent="border-l-emerald-500"
+          accent={["text-emerald-100", "from-emerald-500 via-teal-600 to-cyan-700", CheckCircle2]}
           hint="Not expired or cancelled"
           loading={summaryLoading}
         />

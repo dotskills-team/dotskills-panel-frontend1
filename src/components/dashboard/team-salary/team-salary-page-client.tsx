@@ -53,6 +53,7 @@ import {
   type ITeamSalary,
 } from "@/types/team-salary.types";
 import { cn } from "@/lib/utils";
+import { FinanceStatCard } from "@/components/dashboard/my-finance/FinanceStatCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -109,39 +110,6 @@ const getPaidPercent = (salary: ITeamSalary) => {
   return Math.min(100, Math.round((salary.paidAmount / total) * 100));
 };
 
-function StatCard({
-  title,
-  value,
-  caption,
-  icon: Icon,
-  tone,
-}: {
-  title: string;
-  value: string;
-  caption: string;
-  icon: typeof WalletCards;
-  tone: string;
-}) {
-  return (
-    <Card className="rounded-xl border-0 bg-linear-to-br bg-gray-100  transition-all ease-in-out duration-500 transform hover:bg-slate-200 dark:bg-slate-900 hover:scale-105 shadow-sm overflow-hidden hover:-translate-y-0.5 hover:shadow-md">
-      <CardContent className="flex items-center gap-3 p-4">
-        <div
-          className={cn(
-            "flex size-11 shrink-0 items-center justify-center rounded-xl",
-            tone,
-          )}
-        >
-          <Icon />
-        </div>
-        <div className="min-w-0">
-          <p className="text-xs ">{title}</p>
-          <p className="mt-1 text-lg font-semibold tracking-tight">{value}</p>
-          <p className="truncate text-xs">{caption}</p>
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
 
 function StatusBadge({ status }: { status: SalaryPaymentStatus }) {
   const config = getSalaryStatusConfig(status);
@@ -991,8 +959,8 @@ export function TeamSalaryPageClient() {
           </Button>
         </div>
       </div>
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-        <StatCard
+      <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-3 xl:grid-cols-5">
+        <FinanceStatCard
           title="Total Payroll"
           value={money(stats?.totalSalary)}
           caption={
@@ -1001,35 +969,40 @@ export function TeamSalaryPageClient() {
               : "Total this month"
           }
           icon={WalletCards}
-          tone="bg-blue-500/10 text-blue-600"
+          tone="text-blue-100"
+          gradient="from-blue-600 via-indigo-600 to-violet-600"
         />
-        <StatCard
+        <FinanceStatCard
           title="Total Paid"
           value={money(stats?.totalPaid)}
           caption={`${stats?.totalSalary ? Math.round((stats.totalPaid / stats.totalSalary) * 100) : 0}% of total payroll`}
           icon={CircleDollarSign}
-          tone="bg-emerald-500/10 text-emerald-600"
+          tone="text-emerald-100"
+          gradient="from-emerald-500 via-teal-600 to-cyan-700"
         />
-        <StatCard
+        <FinanceStatCard
           title="Total Due"
           value={money(stats?.totalDue)}
           caption="Remaining to pay"
           icon={FileText}
-          tone="bg-amber-500/10 text-amber-600"
+          tone="text-amber-100"
+          gradient="from-amber-500 via-orange-500 to-orange-600"
         />
-        <StatCard
+        <FinanceStatCard
           title="Employees"
           value={String(stats?.totalRecords ?? 0)}
           caption="Total employees"
           icon={Users}
-          tone="bg-blue-500/10 text-blue-600"
+          tone="text-violet-100"
+          gradient="from-violet-600 via-purple-600 to-fuchsia-700"
         />
-        <StatCard
+        <FinanceStatCard
           title="Overdue"
           value={String(stats?.pendingCount ?? 0)}
           caption="Pending payments"
           icon={CheckCircle2}
-          tone="bg-rose-500/10 text-rose-600"
+          tone="text-rose-100"
+          gradient="from-rose-500 via-pink-600 to-fuchsia-600"
         />
       </div>
       <Card className="bg-slate-100 dark:bg-slate-950 p-0">

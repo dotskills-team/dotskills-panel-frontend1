@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { FinanceStatCard } from "@/components/dashboard/my-finance/FinanceStatCard";
 import { Users, CheckCircle2, AlertCircle, Lock } from "lucide-react";
 
 export interface UserStatsData {
@@ -21,55 +21,50 @@ export function UserStatsCards({ stats, isLoading }: UserStatsCardsProps) {
       title: "Total Users",
       value: stats?.totalCount || 0,
       icon: Users,
-      color: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+      tone: "text-blue-100",
+      gradient: "from-blue-600 via-indigo-600 to-violet-600",
+      caption: "All registered users",
     },
     {
       title: "Active Users",
       value: stats?.ACTIVE || 0,
       icon: CheckCircle2,
-      color: "bg-green-500/10 text-green-600 dark:text-green-400",
+      tone: "text-emerald-100",
+      gradient: "from-emerald-500 via-teal-600 to-cyan-700",
+      caption: "Currently active",
     },
     {
       title: "Inactive Users",
       value: stats?.INACTIVE || 0,
       icon: AlertCircle,
-      color: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
+      tone: "text-amber-100",
+      gradient: "from-amber-500 via-orange-500 to-orange-600",
+      caption: "Not active",
     },
     {
       title: "Suspended Users",
       value: stats?.SUSPENDED || 0,
       icon: Lock,
-      color: "bg-red-500/10 text-red-600 dark:text-red-400",
+      tone: "text-rose-100",
+      gradient: "from-rose-500 via-pink-600 to-fuchsia-600",
+      caption: "Access suspended",
     },
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {statCards.map((stat) => {
-        const Icon = stat.icon;
-        return (
-          <Card
-            key={stat.title}
-            className="bg-gray-100 dark:bg-slate-950 hover:shadow-md transition-shadow duration-200"
-          >
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
-              <CardTitle className="text-sm font-medium text-muted-foreground">
-                {stat.title}
-              </CardTitle>
-              <div className={`p-2 rounded-lg ${stat.color}`}>
-                <Icon className="h-4 w-4" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              {isLoading ? (
-                <div className="h-8 bg-muted rounded animate-pulse" />
-              ) : (
-                <p className="text-2xl font-bold">{stat.value}</p>
-              )}
-            </CardContent>
-          </Card>
-        );
-      })}
+    <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4">
+      {statCards.map((stat) => (
+        <FinanceStatCard
+          key={stat.title}
+          title={stat.title}
+          value={String(stat.value)}
+          caption={stat.caption}
+          icon={stat.icon}
+          tone={stat.tone}
+          gradient={stat.gradient}
+          loading={isLoading}
+        />
+      ))}
     </div>
   );
 }

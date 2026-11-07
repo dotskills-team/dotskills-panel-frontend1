@@ -119,7 +119,7 @@ const compact = (value: number) =>
 
 export function KpiGrid({ kpis }: { kpis: DashboardKpi[] }) {
   return (
-    <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+    <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-3 xl:grid-cols-4">
       {kpis.map((kpi) => (
         <FinanceStatCard
           key={kpi.key}
