@@ -132,7 +132,7 @@ export function ExpensePageClient() {
   const [viewing, setViewing] = useState<IExpense | null>(null);
 
   const categoriesQuery = useExpenseCategories({ limit: 100 });
-  const accountsQuery = useFinancialAccounts({ limit: 100 });
+  const accountsQuery = useFinancialAccounts({ limit: 100, scope: "all" });
 
   // Preset ranges (or custom dates). "All time" sends no dates.
   const dateRange = useMemo<DashboardRangeParams>(
