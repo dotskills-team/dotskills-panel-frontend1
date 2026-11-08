@@ -5,6 +5,7 @@ import { RefreshCw } from "lucide-react";
 
 import { useDashboardOverview } from "@/features/dashboard/hooks/useDashboardOverview";
 import { useCurrentUser } from "@/stores/auth.selectors";
+import { AttendanceCard } from "@/components/dashboard/attendance/attendance-card";
 import { LeaveDashboardWidget } from "@/components/dashboard/leave/leave-dashboard-widget";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -195,6 +196,8 @@ function OverviewContent({
           </div>
         </section>
       )}
+
+      <AttendanceCard />
 
       <LeaveDashboardWidget />
 

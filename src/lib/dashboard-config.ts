@@ -85,6 +85,7 @@ const COLOR = {
 const NAV_ICON = {
   dashboard: { icon: "LayoutDashboard", iconColor: COLOR.indigo },
   leave: { icon: "CalendarDays", iconColor: COLOR.teal },
+  attendance: { icon: "Clock", iconColor: COLOR.amber },
 
   // Accounts
   expenseCategory: { icon: "Tags", iconColor: COLOR.orange },
@@ -171,6 +172,20 @@ const LEAVE_GROUP: NavGroup = {
       href: "/dashboard/leave",
       description: "Leave requests, balance and approvals",
       ...NAV_ICON.leave,
+    },
+  ],
+};
+
+/** Every role can check in and out; manager and admin tabs are hidden inside the page. */
+const ATTENDANCE_GROUP: NavGroup = {
+  label: "Attendance",
+  items: [
+    {
+      id: "attendance",
+      label: "Attendance",
+      href: "/dashboard/attendance",
+      description: "Check in, breaks and working hours",
+      ...NAV_ICON.attendance,
     },
   ],
 };
@@ -540,5 +555,5 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
   ],
 };
 export const navigationConfig: Record<UserRole, NavGroup[]> = Object.fromEntries(
-  Object.entries(baseNavigationConfig).map(([role, groups]) => [role, [...groups, LEAVE_GROUP]]),
+  Object.entries(baseNavigationConfig).map(([role, groups]) => [role, [...groups, ATTENDANCE_GROUP, LEAVE_GROUP]]),
 ) as Record<UserRole, NavGroup[]>;

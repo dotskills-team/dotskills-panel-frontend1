@@ -53,7 +53,8 @@ export type PageAccess =
   | "my-accounts"
   | "my-expenses"
   | "domain-hosting"
-  | "leave";
+  | "leave"
+  | "attendance";
 
 export interface Page {
   id: PageAccess;
