@@ -6,7 +6,6 @@ import { toast } from "sonner";
 import {
   ArrowLeft,
   ArrowRight,
-  CircleDollarSign,
   Eye,
   Pencil,
   Plus,
@@ -14,6 +13,7 @@ import {
   Search,
   Trash,
 } from "lucide-react";
+import { TakaIcon } from "@/components/shared/TakaIcon";
 
 import { useDeleteExpense, useExpenses } from "@/features/expense/hooks/use-expense";
 import { useExpenseCategories } from "@/features/expense-category/hooks/use-expense-category";
@@ -46,7 +46,7 @@ import {
 import { creatorName } from "@/components/dashboard/my-finance/finance-format";
 
 const money = (value?: number) =>
-  new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT" }).format(value ?? 0);
+  new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT", currencyDisplay: "narrowSymbol" }).format(value ?? 0);
 
 const nameOf = (value: unknown, key: string) => {
   if (!value) return "—";
@@ -170,7 +170,7 @@ export function ExpensePageClient() {
           title="Total Amount"
           value={money(totalAmount)}
           caption="Sum on this page"
-          icon={CircleDollarSign}
+          icon={TakaIcon}
           tone="text-rose-100"
           gradient="from-rose-500 via-pink-600 to-fuchsia-600"
         />

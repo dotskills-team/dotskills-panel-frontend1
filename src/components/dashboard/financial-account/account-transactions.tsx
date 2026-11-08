@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 const money = (v?: number) =>
-  new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT" }).format(v ?? 0);
+  new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT", currencyDisplay: "narrowSymbol" }).format(v ?? 0);
 
 const TYPE_LABEL: Record<TransactionType, string> = {
   DEPOSIT: "Deposit",

@@ -1,7 +1,7 @@
 import type { IExpense } from "@/types/expense.types";
 
 export const formatMoney = (value?: number) =>
-  new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT" }).format(value ?? 0);
+  new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT", currencyDisplay: "narrowSymbol" }).format(value ?? 0);
 
 /** Name of the user who recorded an expense (the API populates `createdBy`). */
 export const creatorName = (expense: IExpense) => {

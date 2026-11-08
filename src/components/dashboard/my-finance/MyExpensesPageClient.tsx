@@ -4,7 +4,6 @@ import { useMemo, useState } from "react";
 import {
   BarChart3,
   CalendarDays,
-  CircleDollarSign,
   Eye,
   Landmark,
   Pencil,
@@ -13,6 +12,7 @@ import {
   Tag,
   TrendingUp,
 } from "lucide-react";
+import { TakaIcon } from "@/components/shared/TakaIcon";
 
 import { useExpenseSummary, useExpenses } from "@/features/expense/hooks/use-expense";
 import { useFinancialAccounts } from "@/features/financial-account/hooks/use-financial-account";
@@ -116,7 +116,7 @@ export function MyExpensesPageClient() {
           title="Total Spent"
           value={formatMoney(stats?.totalAmount)}
           caption={`${stats?.totalCount ?? 0} expenses recorded`}
-          icon={CircleDollarSign}
+          icon={TakaIcon}
           tone="text-rose-100"
           gradient="from-rose-500 via-pink-600 to-fuchsia-600"
         />

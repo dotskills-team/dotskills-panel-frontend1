@@ -9,7 +9,6 @@ import {
 import {
   Users,
   TrendingUp,
-  DollarSign,
   Briefcase,
   Banknote,
 } from "lucide-react";

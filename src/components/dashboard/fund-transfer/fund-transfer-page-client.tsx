@@ -25,7 +25,7 @@ import { FundTransferFormDialog } from "./fund-transfer-form-dialog";
 import { useFinancialPayments } from "@/features/financial-account/hooks/use-financial-account";
 
 const money = (value?: number) =>
-    new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT" }).format(value ?? 0);
+    new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT", currencyDisplay: "narrowSymbol" }).format(value ?? 0);
 
 const accountName = (value: IFundTransfer["fromAccountId"]) =>
     typeof value === "string" ? value : value?.accountName ?? "—";

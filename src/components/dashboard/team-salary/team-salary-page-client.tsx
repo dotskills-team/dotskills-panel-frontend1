@@ -7,7 +7,6 @@ import {
   ArrowRight,
   CalendarDays,
   CheckCircle2,
-  CircleDollarSign,
   Eye,
   FileText,
   Landmark,
@@ -16,6 +15,7 @@ import {
   Users,
   WalletCards,
 } from "lucide-react";
+import { TakaIcon } from "@/components/shared/TakaIcon";
 
 import {
   useCreateSalaryPayment,
@@ -976,7 +976,7 @@ export function TeamSalaryPageClient() {
           title="Total Paid"
           value={money(stats?.totalPaid)}
           caption={`${stats?.totalSalary ? Math.round((stats.totalPaid / stats.totalSalary) * 100) : 0}% of total payroll`}
-          icon={CircleDollarSign}
+          icon={TakaIcon}
           tone="text-emerald-100"
           gradient="from-emerald-500 via-teal-600 to-cyan-700"
         />
@@ -1200,7 +1200,7 @@ export function TeamSalaryPageClient() {
                               // disabled={!canRecordSalaryPayment(salary)}
                               aria-label="Add payment / edit extra"
                             >
-                              <CircleDollarSign />
+                              <TakaIcon />
                             </Button>
 
                             <AlertDialog>

@@ -8,8 +8,8 @@ import {
   Zap,
   BookOpen,
   Shield,
-  DollarSign,
 } from "lucide-react";
+import { TakaIcon } from "@/components/shared/TakaIcon";
 
 export type Permission = string;
 
@@ -120,7 +120,7 @@ export const availablePages: Page[] = [
   {
     id: "my-salaries",
     label: "My Salaries",
-    icon: <DollarSign className="h-4 w-4" />,
+    icon: <TakaIcon className="h-4 w-4" />,
     description: "View your salary information",
   },
   {

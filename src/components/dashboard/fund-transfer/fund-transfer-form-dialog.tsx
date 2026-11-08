@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/select";
 
 const money = (value?: number) =>
-  new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT" }).format(value ?? 0);
+  new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT", currencyDisplay: "narrowSymbol" }).format(value ?? 0);
 
 /** Name of an account's owner, when the API populated it. */
 const ownerLabel = (owner: unknown) =>

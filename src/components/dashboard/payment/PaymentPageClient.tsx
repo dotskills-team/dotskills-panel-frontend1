@@ -26,7 +26,7 @@ import { formatDate } from "@/utils/dateFormat";
 const ALL = "ALL";
 
 const money = (value?: number) =>
-    new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT" }).format(value ?? 0);
+    new Intl.NumberFormat("en-BD", { style: "currency", currency: "BDT", currencyDisplay: "narrowSymbol" }).format(value ?? 0);
 
 const STATUS_OPTIONS: { value: FinancialPaymentStatus; label: string }[] = [
     { value: "COMPLETE", label: "Complete" },

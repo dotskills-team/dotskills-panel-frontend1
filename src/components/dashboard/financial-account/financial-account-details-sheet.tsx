@@ -43,7 +43,7 @@ interface FinancialAccountDetailsSheetProps {
 /* -------------------------------- Helpers --------------------------------- */
 
 const formatMoney = (value?: number, currency = "BDT") =>
-  new Intl.NumberFormat("en-BD", { style: "currency", currency }).format(value ?? 0);
+  new Intl.NumberFormat("en-BD", { style: "currency", currency: currency === "৳" ? "BDT" : currency, currencyDisplay: "narrowSymbol" }).format(value ?? 0);
 
 const formatDateTime = (value?: string) =>
   value

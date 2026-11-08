@@ -44,7 +44,8 @@ export const formatCurrency = (
 ): string => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency,
+    currency: currency === "৳" ? "BDT" : currency,
+    currencyDisplay: "narrowSymbol",
     maximumFractionDigits: 0,
   }).format(value ?? 0);
 };

@@ -107,7 +107,7 @@ const formatLabel = (value: string) =>
         .join(" ");
 
 const formatCurrency = (amount?: number) =>
-    `BDT ${Number(amount ?? 0).toLocaleString("en-US")}`;
+    `৳ ${Number(amount ?? 0).toLocaleString("en-US")}`;
 
 const formatDate = (date?: string) =>
     date

@@ -112,14 +112,7 @@ export default function NotFound() {
           href="/"
           className="mb-10 inline-flex items-center gap-2.5 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
         >
-          {/* <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-indigo-500 to-indigo-700 shadow-[0_2px_10px_-2px_rgba(79,70,229,0.55)]">
-            <span className="absolute left-1.75 top-1.75 h-1.5 w-1.5 rounded-full bg-white/90" />
-            <span className="absolute bottom-1.75 right-1.75 h-1.5 w-1.5 rounded-full bg-white/50" />
-            <span className="text-[13px] font-semibold text-white">D</span>
-          </span>
-          <span className="text-[15px] font-semibold tracking-tight text-foreground">
-            DotSkills <span className="text-muted-foreground">Panel</span>
-          </span> */}
+         
           <Image
             // src="/assets/dotskills-logo-sidebar-black.png"
             src="/assets/dotskills-logo-loading-black.png"

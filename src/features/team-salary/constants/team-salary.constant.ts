@@ -1,9 +1,9 @@
 import {
   CheckCircle2,
   Clock3,
-  CircleDollarSign,
   XCircle,
 } from "lucide-react";
+import { TakaIcon } from "@/components/shared/TakaIcon";
 
 import {
   SalaryPaymentStatus,
@@ -23,7 +23,7 @@ export const TEAM_SALARY_STATUS_OPTIONS = [
     value: SalaryPaymentStatus.PARTIAL,
     label: "Partial",
     description: "Salary has been partially paid.",
-    icon: CircleDollarSign,
+    icon: TakaIcon,
     className:
       "border-blue-200 bg-blue-50 text-blue-700 dark:border-blue-900/50 dark:bg-blue-950/30 dark:text-blue-400",
   },

@@ -64,7 +64,7 @@ import { LoansSection } from "./loans-section";
 const money = (value?: number) =>
   new Intl.NumberFormat("en-BD", {
     style: "currency",
-    currency: "BDT",
+    currency: "BDT", currencyDisplay: "narrowSymbol",
   }).format(value ?? 0);
 
 /* -------------------------------------------------------------------------- */
