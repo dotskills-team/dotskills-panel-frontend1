@@ -82,6 +82,7 @@ const TONE_ICON_COLOR: Record<DashboardTone, string> = {
 const KPI_ICONS: Record<string, LucideIcon> = {
   collected: HandCoins,
   expenses: Receipt,
+  totalSalary: Banknote,
   net: TrendingUp,
   outstanding: AlertCircle,
   dues: AlertCircle,

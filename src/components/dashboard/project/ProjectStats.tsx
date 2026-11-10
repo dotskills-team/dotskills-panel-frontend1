@@ -103,14 +103,16 @@ export function ProjectsStats({ projectStat, isLoading, showMoney = true }: Proj
   );
 
   return (
-    <div className="flex flex-col gap-3">
+    // Mobile: one continuous 3-col grid (the inner wrappers use `contents`).
+    // sm and up: the original two separate grids stacked with gap-3.
+    <div className="grid grid-cols-3 gap-2 sm:flex sm:flex-col sm:gap-3">
       {showMoney && (
-        <div className={`grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4 ${"grid-cols-3"}`}>
+        <div className="contents sm:grid sm:grid-cols-2 sm:gap-3 lg:grid-cols-4">
           {moneyStats.map(renderCard)}
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-2 sm:grid-cols-3 sm:gap-3 lg:grid-cols-7">{stats.map(renderCard)}</div>
+      <div className="contents sm:grid sm:grid-cols-3 sm:gap-3 lg:grid-cols-7">{stats.map(renderCard)}</div>
     </div>
   );
 }
