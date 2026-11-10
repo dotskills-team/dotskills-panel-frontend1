@@ -60,6 +60,9 @@ export interface IClient {
   assignedManager?: User;
   accountManager?: User;
 
+  // Marketing/sales team member who gets the credit for this client
+  creditedTo?: User;
+
   clientType: ClientType;
 
   clientCode: string;
@@ -102,10 +105,11 @@ export interface IClient {
   completedProjects: number;
   activeProjects: number;
 
-  totalRevenue: number;
-  totalInvoices: number;
-  totalPaid: number;
-  totalDue: number;
+  // Not sent to non-admin roles
+  totalRevenue?: number;
+  totalInvoices?: number;
+  totalPaid?: number;
+  totalDue?: number;
 
   notes: IClientNote[];
   documents: IClientDocument[];
@@ -159,6 +163,9 @@ export interface CreateClientPayload {
   assignedManager?: string;
   accountManager?: string;
 
+  // Only sent by roles allowed to change it
+  creditedTo?: string;
+
   clientType?: ClientType;
 
   companyName?: string;
@@ -205,6 +212,19 @@ export interface CreateClientPayload {
 
 export type UpdateClientPayload = Partial<CreateClientPayload>;
 
+export interface UpdateCreditedToPayload {
+  creditedTo: string;
+}
+
+/** A user that can be picked in "credited to". */
+export interface CreditCandidate {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email?: string;
+  role: string;
+}
+
 export interface AssignClientManagerPayload {
   accountManager: string;
 }
@@ -243,10 +263,11 @@ export interface IClientStats {
   totalProjects: number;
   completedProjects: number;
   activeProjects: number;
-  totalRevenue: number;
-  totalInvoices: number;
-  totalPaid: number;
-  totalDue: number;
+  // Not sent to non-admin roles
+  totalRevenue?: number;
+  totalInvoices?: number;
+  totalPaid?: number;
+  totalDue?: number;
 }
 
 export interface ClientListResponse {

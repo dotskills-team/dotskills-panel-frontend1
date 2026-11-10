@@ -4,6 +4,7 @@ import {
   Briefcase,
   Code,
   Palette,
+  Clapperboard,
   TrendingUp,
   Users,
 } from "lucide-react";
@@ -64,13 +65,31 @@ export const roleStyles: Record<string, RoleStyle> = {
     bgColor: "bg-[#EC4899]",
     textColor: "text-white",
   },
-  MARKETER: {
-    label: "Marketer",
+  VIDEO_EDITOR: {
+    label: "Video Editor",
+    className:
+      "border-[#8B5CF6] bg-[#F5F3FF] text-[#8B5CF6] dark:bg-[#2E1065] dark:text-[#C4B5FD]",
+    hex: "#8B5CF6",
+    icon: Clapperboard,
+    bgColor: "bg-[#8B5CF6]",
+    textColor: "text-white",
+  },
+  SALES_MARKETING: {
+    label: "Sales & Marketing",
     className:
       "border-[#F59E0B] bg-[#FFFBEB] text-[#F59E0B] dark:bg-[#452407] dark:text-[#FCD34D]",
     hex: "#F59E0B",
     icon: TrendingUp,
     bgColor: "bg-[#F59E0B]",
+    textColor: "text-white",
+  },
+  MARKETING_SALES_LEAD: {
+    label: "Marketing & Sales Lead",
+    className:
+      "border-[#EA580C] bg-[#FFF7ED] text-[#EA580C] dark:bg-[#431407] dark:text-[#FDBA74]",
+    hex: "#EA580C",
+    icon: TrendingUp,
+    bgColor: "bg-[#EA580C]",
     textColor: "text-white",
   },
   STAFF: {

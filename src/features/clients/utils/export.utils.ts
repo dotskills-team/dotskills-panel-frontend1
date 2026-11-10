@@ -7,6 +7,8 @@ import {
 
 interface ExportClientsOptions {
   filename?: string;
+  /** false for roles that must not see project money */
+  includeMoney?: boolean;
 }
 
 const escapeCsvValue = (value: unknown): string => {
@@ -39,6 +41,8 @@ export const exportClients = (
 ) => {
   if (!clients.length) return;
 
+  const includeMoney = options?.includeMoney === true;
+
   const headers = [
     "Client Code",
     "Client Name",
@@ -50,9 +54,7 @@ export const exportClients = (
     "Assigned Manager",
     "Projects",
     "Completed Projects",
-    "Revenue",
-    "Paid",
-    "Due",
+    ...(includeMoney ? ["Revenue", "Paid", "Due"] : []),
     "Joined Date",
     "Created At",
   ];
@@ -80,11 +82,13 @@ export const exportClients = (
 
     client.completedProjects ?? 0,
 
-    formatCurrency(client.totalRevenue),
-
-    formatCurrency(client.totalPaid),
-
-    formatCurrency(client.totalDue),
+    ...(includeMoney
+      ? [
+          formatCurrency(client.totalRevenue),
+          formatCurrency(client.totalPaid),
+          formatCurrency(client.totalDue),
+        ]
+      : []),
 
     formatDate(client.joinedAt),
 

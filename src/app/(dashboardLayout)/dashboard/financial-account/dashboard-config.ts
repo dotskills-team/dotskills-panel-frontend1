@@ -259,9 +259,54 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
       ],
     },
   ],
-  MARKETER: [
+  VIDEO_EDITOR: [
     {
-      label: "Marketing",
+      label: "Video",
+      items: [
+        {
+          id: "dashboard",
+          label: "Dashboard",
+          href: "/dashboard",
+        },
+      ],
+    },
+  ],
+  SALES_MARKETING: [
+    {
+      label: "Sales & Marketing",
+      items: [
+        {
+          id: "leads",
+          label: "Leads",
+          href: "/dashboard/leads",
+        },
+         {
+          id: "team-salary",
+          label: "Team Salary",
+          href: "/dashboard/team-salary",
+          description: "Manage salary of team members",
+        },
+         {
+          id: "clients-management",
+          label: "Clients",
+          href: "/dashboard/clients",
+        },
+        {
+          id: "dashboard",
+          label: "Dashboard",
+          href: "/dashboard",
+        },
+        {
+          id: "blogs",
+          label: "Content",
+          href: "/dashboard/blog",
+        },
+      ],
+    },
+  ],
+  MARKETING_SALES_LEAD: [
+    {
+      label: "Marketing & Sales Lead",
       items: [
         {
           id: "leads",

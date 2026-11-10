@@ -284,7 +284,9 @@ interface ColumnsConfig {
     | "MANAGER"
     | "DEVELOPER"
     | "DESIGNER"
-    | "MARKETER"
+    | "SALES_MARKETING"
+    | "MARKETING_SALES_LEAD"
+    | "VIDEO_EDITOR"
     | "STAFF";
 }
 

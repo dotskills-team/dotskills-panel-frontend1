@@ -5,6 +5,7 @@ export type UserRole =
   | "MODERATOR"
   | "TELLICELSS"
   | "GENERALSTAFF"
+  | "MARKETING_SALES_LEAD"
   | "CUSTOMER";
 
 export type RouteConfig = {
@@ -108,6 +109,8 @@ export const getDefaultDashboardRoute = (role: UserRole): string => {
       return "/staff/dashboard";
     case "ADMIN":
       return "/staff/dashboard";
+    case "MARKETING_SALES_LEAD":
+      return "/dashboard";
     default:
       return "/";
   }

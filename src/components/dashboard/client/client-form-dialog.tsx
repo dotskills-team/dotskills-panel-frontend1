@@ -27,6 +27,9 @@ import { CLIENT_TYPE_OPTIONS } from "@/features/clients/constants/client.constan
 import type { IClient } from "@/types/clients";
 import type { CreateClientValues } from "@/features/clients/schemas/client.schema";
 import { Loader2 } from "lucide-react";
+import { useCreditCandidates } from "@/features/clients/hooks/useCreditCandidates";
+import { canEditCreditedTo } from "@/features/users/utils/user.utils";
+import { useUser } from "../../../context/UserContext";
 
 interface ClientFormDialogProps {
   open: boolean;
@@ -81,6 +84,7 @@ const clientToFormValues = (client: IClient): CreateClientValues => ({
   city: client.city ?? "",
   zipCode: client.zipCode ?? "",
   address: client.address ?? "",
+  creditedTo: client.creditedTo?._id,
   estimatedValue: client.estimatedValue,
   budget: client.budget,
   timeline: client.timeline ?? "",
@@ -118,6 +122,13 @@ export function ClientFormDialog({
   }, [open, client, reset]);
 
   const watchedClientType = watch("clientType");
+
+  // "Credited to" is editable only for admins and the marketing & sales lead,
+  // and only for an existing client (new clients are credited to their creator)
+  const { user } = useUser();
+  const showCreditedTo = !!client && canEditCreditedTo(user?.role);
+  const { data: creditCandidates = [] } = useCreditCandidates(showCreditedTo);
+  const watchedCreditedTo = watch("creditedTo");
 
   const handleFormSubmit = async (data: CreateClientValues) => {
     await onSubmit(data);
@@ -205,6 +216,29 @@ export function ClientFormDialog({
                 {...register("alternatePhone")}
               />
             </div>
+
+            {showCreditedTo && (
+              <div className="space-y-1.5">
+                <Label>Credited to</Label>
+                <Select
+                  value={watchedCreditedTo ?? ""}
+                  onValueChange={(v) =>
+                    setValue("creditedTo", v, { shouldDirty: true })
+                  }
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select team member" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {creditCandidates.map((candidate) => (
+                      <SelectItem key={candidate._id} value={candidate._id}>
+                        {candidate.firstName} {candidate.lastName}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
 
             <div className="space-y-1.5">
               <Label>Client Type</Label>

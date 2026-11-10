@@ -46,6 +46,9 @@ import { ClientTimeline } from "./client-timeline";
 import { ClientTypeBadge } from "./client-type-badge";
 import { DocumentItem } from "./document-item";
 import { RevenueCard } from "./revenue-card";
+import { CreditedToControl } from "./credited-to-control";
+import { canViewProjectValue } from "@/features/users/utils/user.utils";
+import { useUser } from "../../../context/UserContext";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 interface ClientDetailsSheetProps {
@@ -271,7 +274,13 @@ function ActivityRow({ entry }: { entry: ActivityEntry }) {
 /*  Project card                                                              */
 /* -------------------------------------------------------------------------- */
 
-function ProjectCard({ project }: { project: ClientProject }) {
+function ProjectCard({
+  project,
+  showValue,
+}: {
+  project: ClientProject;
+  showValue: boolean;
+}) {
   const paid = getProjectPaid(project);
   const due = getProjectDue(project);
   const manager = project.projectManager
@@ -315,7 +324,7 @@ function ProjectCard({ project }: { project: ClientProject }) {
             >
               {labelize(project.status)}
             </Badge>
-            {project.paymentStatus && (
+            {showValue && project.paymentStatus && (
               <Badge
                 variant="secondary"
                 className={cn(
@@ -329,7 +338,8 @@ function ProjectCard({ project }: { project: ClientProject }) {
           </div>
         </div>
 
-        {/* Money */}
+        {/* Money (admin-level roles only) */}
+        {showValue && (
         <div className="grid grid-cols-3 gap-2">
           <StatPill label="Budget" value={formatCurrency(project.budget ?? 0)} />
           <StatPill
@@ -345,6 +355,7 @@ function ProjectCard({ project }: { project: ClientProject }) {
             }
           />
         </div>
+        )}
 
         {/* Meta */}
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -415,6 +426,10 @@ export function ClientDetailsSheet({
   onEdit,
   onAddNote,
 }: ClientDetailsSheetProps) {
+  const { user } = useUser();
+  // Second layer only: the server already strips money for other roles
+  const showValue = canViewProjectValue(user?.role);
+
   const activity = useMemo(() => buildActivityFeed(client), [client]);
 
   const projects = useMemo(
@@ -551,11 +566,17 @@ export function ClientDetailsSheet({
                           : "Unassigned"
                       }
                     />
+                    <AboutItem
+                      icon={Users}
+                      label="Credited To"
+                      value={<CreditedToControl client={client} />}
+                    />
                   </CardContent>
                 </Card>
 
-                <RevenueCard client={client} />
+                {showValue && <RevenueCard client={client} />}
 
+                {showValue && (
                 <Card className="rounded-2xl border-border/70 shadow-sm">
                   <CardHeader className="pb-3">
                     <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -576,7 +597,7 @@ export function ClientDetailsSheet({
                       label="Total Due"
                       value={formatCurrency(client.totalDue)}
                       valueClassName={
-                        client.totalDue > 0
+                        (client.totalDue ?? 0) > 0
                           ? "text-red-600 dark:text-red-400"
                           : undefined
                       }
@@ -587,6 +608,7 @@ export function ClientDetailsSheet({
                     />
                   </CardContent>
                 </Card>
+                )}
 
                 <Card className="rounded-2xl border-border/70 shadow-sm">
                   <CardHeader className="pb-3">
@@ -609,10 +631,12 @@ export function ClientDetailsSheet({
                       value={formatNumber(projectStats.active)}
                       valueClassName="text-amber-600 dark:text-amber-400"
                     />
-                    <StatPill
-                      label="Total Budget"
-                      value={formatCurrency(projectStats.totalBudget)}
-                    />
+                    {showValue && (
+                      <StatPill
+                        label="Total Budget"
+                        value={formatCurrency(projectStats.totalBudget)}
+                      />
+                    )}
                   </CardContent>
                 </Card>
 
@@ -780,6 +804,7 @@ export function ClientDetailsSheet({
                         {projectStats.completionRate}%
                       </span>
                     </div>
+                    {showValue && (
                     <div className="flex items-center justify-between">
                       <span className="flex items-center gap-2 text-sm text-muted-foreground">
                         <Wallet className="h-4 w-4" aria-hidden="true" />
@@ -789,6 +814,8 @@ export function ClientDetailsSheet({
                         {formatCurrency(projectStats.totalBudget)}
                       </span>
                     </div>
+                    )}
+                    {showValue && (
                     <div className="flex items-center justify-between">
                       <span className="text-sm text-muted-foreground">
                         Paid / Due
@@ -809,6 +836,7 @@ export function ClientDetailsSheet({
                         </span>
                       </span>
                     </div>
+                    )}
                   </CardContent>
                 </Card>
 
@@ -823,7 +851,7 @@ export function ClientDetailsSheet({
                 ) : (
                   <div className="space-y-3">
                     {projects.map((project) => (
-                      <ProjectCard key={project._id} project={project} />
+                      <ProjectCard key={project._id} project={project} showValue={showValue} />
                     ))}
                   </div>
                 )}

@@ -74,6 +74,7 @@ export const USER_DEPARTMENTS = [
   "Design",
   "Marketing",
   "Sales",
+  "Sales & Marketing",
   "Operations",
   "HR",
   "Finance",
@@ -89,7 +90,8 @@ export const USER_DESIGNATIONS = [
   "CEO",
   "Designer",
   "Product Manager",
-  "Sales Executive"
+  "Sales Executive",
+  "Head of Sales & Marketing",
 ];
 
 export const ROLES_WITH_PERMISSIONS = [
@@ -98,7 +100,9 @@ export const ROLES_WITH_PERMISSIONS = [
   { value: Role.MANAGER, label: "Manager", canManageTeam: true },
   { value: Role.DEVELOPER, label: "Developer" },
   { value: Role.DESIGNER, label: "Designer" },
-  { value: Role.MARKETER, label: "Marketer" },
+  { value: Role.VIDEO_EDITOR, label: "Video Editor" },
+  { value: Role.SALES_MARKETING, label: "Sales & Marketing" },
+  { value: Role.MARKETING_SALES_LEAD, label: "Marketing & Sales Lead" },
   { value: Role.STAFF, label: "Staff" },
 ];
 
@@ -109,7 +113,9 @@ function getRoleColor(role: string): string {
     [Role.MANAGER]: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
     [Role.DEVELOPER]: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
     [Role.DESIGNER]: "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200",
-    [Role.MARKETER]: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+    [Role.VIDEO_EDITOR]: "bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200",
+    [Role.SALES_MARKETING]: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+    [Role.MARKETING_SALES_LEAD]: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
     [Role.STAFF]: "bg-muted text-gray-800 dark:bg-gray-700 dark:text-gray-200",
   };
   return colors[role] || "bg-muted text-gray-800";

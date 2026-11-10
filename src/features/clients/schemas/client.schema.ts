@@ -51,6 +51,9 @@ export const createClientSchema = z.object({
 
   accountManager: z.string().optional(),
 
+  // Edit form only; the server enforces who may change it
+  creditedTo: z.string().optional(),
+
   country: z.string().optional(),
 
   state: z.string().optional(),

@@ -14,7 +14,9 @@ const roleSchema = z.enum([
   Role.MANAGER,
   Role.DEVELOPER,
   Role.DESIGNER,
-  Role.MARKETER,
+  Role.SALES_MARKETING,
+  Role.MARKETING_SALES_LEAD,
+  Role.VIDEO_EDITOR,
   Role.STAFF,
 ]);
 

@@ -13,6 +13,8 @@ import type {
   IClient,
   UpdateClientPayload,
   UpdateClientStatusPayload,
+  UpdateCreditedToPayload,
+  CreditCandidate,
 } from "@/types/clients";
 
 const BASE_URL = "/clients";
@@ -81,6 +83,20 @@ export const clientApi = {
   permanentlyDeleteClient: (id: string) =>
     apiClient.delete<DeleteClientResponse>(
       `${BASE_URL}/${id}/permanent`,
+    ),
+
+  getCreditCandidates: () =>
+    apiClient.get<ApiResponse<CreditCandidate[]>>(
+      `${BASE_URL}/credit-candidates`,
+    ),
+
+  updateCreditedTo: (
+    id: string,
+    payload: UpdateCreditedToPayload,
+  ) =>
+    apiClient.patch<ApiResponse<IClient>>(
+      `${BASE_URL}/${id}/credited-to`,
+      payload,
     ),
 
   updateStatus: (

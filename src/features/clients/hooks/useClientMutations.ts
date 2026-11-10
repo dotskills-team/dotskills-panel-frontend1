@@ -36,6 +36,12 @@ export function useClientMutations() {
       onSuccess: invalidate,
     }),
 
+    updateCreditedTo: useMutation({
+      mutationFn: ({ id, payload }: { id: string; payload: Parameters<typeof clientApi.updateCreditedTo>[1] }) =>
+        clientApi.updateCreditedTo(id, payload),
+      onSuccess: invalidate,
+    }),
+
     trashClient: useMutation({
       mutationFn: clientApi.trashClient,
       onSuccess: invalidate,

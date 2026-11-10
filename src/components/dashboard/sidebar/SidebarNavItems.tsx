@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 import {
   ArrowLeftRight,
   Banknote,
+  BarChart3,
   BookOpen,
   Briefcase,
   Building2,
@@ -17,6 +18,7 @@ import {
   CreditCard,
   Folder,
   FolderKanban,
+  Gauge,
   Globe,
   KeyRound,
   Landmark,
@@ -55,6 +57,7 @@ import type { NavGroup } from "@/lib/dashboard-config";
 const ICONS: Record<string, LucideIcon> = {
   ArrowLeftRight,
   Banknote,
+  BarChart3,
   BookOpen,
   Briefcase,
   Building2,
@@ -64,6 +67,7 @@ const ICONS: Record<string, LucideIcon> = {
   CreditCard,
   Folder,
   FolderKanban,
+  Gauge,
   Globe,
   KeyRound,
   Landmark,

@@ -1,6 +1,7 @@
 import {
   ArrowLeftRight,
   Banknote,
+  BarChart3,
   BookOpen,
   Briefcase,
   Building2,
@@ -9,6 +10,7 @@ import {
   Clock,
   CreditCard,
   FolderKanban,
+  Gauge,
   KeyRound,
   Landmark,
   LayoutDashboard,
@@ -30,6 +32,7 @@ import { cn } from "@/lib/utils";
 const ICONS: Record<string, LucideIcon> = {
   ArrowLeftRight,
   Banknote,
+  BarChart3,
   BookOpen,
   Briefcase,
   Building2,
@@ -38,6 +41,7 @@ const ICONS: Record<string, LucideIcon> = {
   Clock,
   CreditCard,
   FolderKanban,
+  Gauge,
   KeyRound,
   Landmark,
   LayoutDashboard,

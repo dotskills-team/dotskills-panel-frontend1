@@ -36,6 +36,12 @@ import { CLIENT_STATUS_OPTIONS } from "@/features/clients/constants/client.const
 import { exportClients } from "@/features/clients/utils/export.utils";
 import { getClientFullName } from "@/features/clients/utils/client.utils";
 import { useUsers } from "@/features/users/hooks";
+import {
+  canEditCreditedTo,
+  canViewProjectValue,
+} from "@/features/users/utils/user.utils";
+import { Role } from "@/types/user.types";
+import { useUser } from "../../../context/UserContext";
 import { ProjectsPagination } from "../project/ProjectPagination";
 
 const ALL_STATUS = "ALL" as const;
@@ -79,6 +85,8 @@ export function ClientsPageClient() {
   }, [meta, page]);
 
   const mutations = useClientMutations();
+  const { user: currentUser } = useUser();
+  const currentRole = currentUser?.role;
   const { data: usersResponse } = useUsers();
   const managers =
     usersResponse?.data?.filter((user) => user.role === "MANAGER") ?? [];
@@ -122,10 +130,26 @@ export function ClientsPageClient() {
   const handleEditClient = async (data: CreateClientValues) => {
     if (!selectedClient) return;
     try {
-      await mutations.updateClient.mutateAsync({
-        id: selectedClient._id,
-        payload: data,
-      });
+      const { creditedTo, ...rest } = data;
+      const creditChanged =
+        !!creditedTo &&
+        canEditCreditedTo(currentRole) &&
+        creditedTo !== selectedClient.creditedTo?._id;
+
+      if (currentRole === Role.MARKETING_SALES_LEAD) {
+        // The lead can only change the credit, not the other client fields
+        if (creditChanged) {
+          await mutations.updateCreditedTo.mutateAsync({
+            id: selectedClient._id,
+            payload: { creditedTo },
+          });
+        }
+      } else {
+        await mutations.updateClient.mutateAsync({
+          id: selectedClient._id,
+          payload: creditChanged ? { ...rest, creditedTo } : rest,
+        });
+      }
       toast.success("Client updated successfully");
       setFormDialogOpen(false);
       setSelectedClient(null);
@@ -201,7 +225,7 @@ export function ClientsPageClient() {
 
   const handleExport = () => {
     try {
-      exportClients(clients);
+      exportClients(clients, { includeMoney: canViewProjectValue(currentRole) });
       toast.success("Clients exported successfully");
     } catch (error) {
       toast.error("Failed to export clients");

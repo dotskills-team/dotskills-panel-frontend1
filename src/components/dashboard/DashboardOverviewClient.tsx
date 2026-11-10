@@ -45,7 +45,9 @@ const ROLE_LABEL: Record<string, string> = {
   MANAGER: "Manager",
   DEVELOPER: "Developer",
   DESIGNER: "Designer",
-  MARKETER: "Marketer",
+  VIDEO_EDITOR: "Video Editor",
+  SALES_MARKETING: "Sales & Marketing",
+  MARKETING_SALES_LEAD: "Marketing & Sales Lead",
   STAFF: "Staff",
 };
 
@@ -55,7 +57,9 @@ const ROLE_SUBTITLE: Record<string, string> = {
   MANAGER: "Your managed projects, collections, dues and upcoming deadlines.",
   DEVELOPER: "Your assigned projects, deadlines and salary.",
   DESIGNER: "Your assigned projects, deadlines and salary.",
-  MARKETER: "Your lead pipeline, clients and personal finances.",
+  VIDEO_EDITOR: "Your assigned projects, deadlines and salary.",
+  SALES_MARKETING: "Your lead pipeline, clients and personal finances.",
+  MARKETING_SALES_LEAD: "Your lead pipeline, clients and personal finances.",
   STAFF: "Your lead pipeline, clients and personal finances.",
 };
 

@@ -19,7 +19,9 @@ const roleColors: Record<string, string> = {
   MANAGER: "bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200",
   DEVELOPER: "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200",
   DESIGNER: "bg-pink-100 text-pink-800 dark:bg-pink-900 dark:text-pink-200",
-  MARKETER: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+  VIDEO_EDITOR: "bg-indigo-100 text-indigo-800 dark:bg-indigo-900 dark:text-indigo-200",
+  SALES_MARKETING: "bg-yellow-100 text-yellow-800 dark:bg-yellow-900 dark:text-yellow-200",
+  MARKETING_SALES_LEAD: "bg-orange-100 text-orange-800 dark:bg-orange-900 dark:text-orange-200",
   STAFF: "bg-muted text-gray-800 dark:bg-gray-800 dark:text-gray-200",
 };
 

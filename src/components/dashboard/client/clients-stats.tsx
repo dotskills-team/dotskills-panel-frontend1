@@ -13,6 +13,8 @@ import {
   Banknote,
 } from "lucide-react";
 import type { IClientStats } from "@/types/clients";
+import { canViewProjectValue } from "@/features/users/utils/user.utils";
+import { useUser } from "../../../context/UserContext";
 
 const stats: {
   icon: typeof Users;
@@ -63,6 +65,8 @@ const stats: {
 
 export function ClientsStats() {
   const { stats: clientStats, isLoading } = useClientStats();
+  const { user } = useUser();
+  const showValue = canViewProjectValue(user?.role);
 
   const activePercent =
     clientStats?.total > 0
@@ -71,7 +75,9 @@ export function ClientsStats() {
 
   return (
     <div className="grid grid-cols-3 gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-4">
-      {stats.map((stat) => (
+      {stats
+        .filter((stat) => showValue || stat.key !== "totalRevenue")
+        .map((stat) => (
         <FinanceStatCard
           key={stat.key}
           title={stat.label}

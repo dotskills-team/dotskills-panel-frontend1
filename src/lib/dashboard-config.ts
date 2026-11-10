@@ -97,6 +97,10 @@ const NAV_ICON = {
   // Management
   team: { icon: "Users", iconColor: COLOR.blue },
   teamSalary: { icon: "Banknote", iconColor: COLOR.teal },
+  kpi: { icon: "Gauge", iconColor: COLOR.violet },
+  kpiReports: { icon: "ClipboardList", iconColor: COLOR.violet },
+  kpiSummary: { icon: "BarChart3", iconColor: COLOR.violet },
+  myKpi: { icon: "Target", iconColor: COLOR.violet },
   clients: { icon: "Building2", iconColor: COLOR.cyan },
   domainHosting: { icon: "Globe", iconColor: COLOR.sky },
   projects: { icon: "FolderKanban", iconColor: COLOR.purple },
@@ -115,7 +119,7 @@ const NAV_ICON = {
   // Developer / Content
   apiKeys: { icon: "KeyRound", iconColor: COLOR.amber },
   myAssignedProjects: { icon: "Package", iconColor: COLOR.blue },
-  mySalaries: { icon: "Payment", iconColor: COLOR.emerald },
+  mySalaries: { icon: "Wallet", iconColor: COLOR.emerald },
   documentation: { icon: "BookOpen", iconColor: COLOR.sky },
   content: { icon: "PenSquare", iconColor: COLOR.violet },
 } as const;
@@ -162,23 +166,12 @@ const ADMIN_ACCOUNTS_GROUP: NavGroup = {
   ],
 };
 
-/** Every role can request leave; approver-only tabs are hidden inside the page. */
-const LEAVE_GROUP: NavGroup = {
-  label: "Leave",
-  items: [
-    {
-      id: "leave",
-      label: "Leave",
-      href: "/dashboard/leave",
-      description: "Leave requests, balance and approvals",
-      ...NAV_ICON.leave,
-    },
-  ],
-};
-
-/** Every role can check in and out; manager and admin tabs are hidden inside the page. */
-const ATTENDANCE_GROUP: NavGroup = {
-  label: "Attendance",
+/** Every role can check in/out and request leave; manager and admin tabs are hidden inside the pages. */
+const ATTENDANCE_LEAVE_GROUP: NavGroup = {
+  label: "Attendance & Leave",
+  icon: "Clock",
+  iconColor: COLOR.amber,
+  collapsible: true,
   items: [
     {
       id: "attendance",
@@ -186,6 +179,13 @@ const ATTENDANCE_GROUP: NavGroup = {
       href: "/dashboard/attendance",
       description: "Check in, breaks and working hours",
       ...NAV_ICON.attendance,
+    },
+    {
+      id: "leave",
+      label: "Leave",
+      href: "/dashboard/leave",
+      description: "Leave requests, balance and approvals",
+      ...NAV_ICON.leave,
     },
   ],
 };
@@ -264,6 +264,27 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
           ...NAV_ICON.teamSalary,
         },
         {
+          id: "kpi",
+          label: "KPI Management",
+          href: "/dashboard/kpi",
+          description: "Monthly targets and achievement",
+          ...NAV_ICON.kpi,
+        },
+        {
+          id: "kpi-reports",
+          label: "KPI Reports",
+          href: "/dashboard/kpi-reports",
+          description: "Review monthly reports",
+          ...NAV_ICON.kpiReports,
+        },
+        {
+          id: "kpi-summary",
+          label: "Team Summary",
+          href: "/dashboard/kpi-summary",
+          description: "Team targets and achievement",
+          ...NAV_ICON.kpiSummary,
+        },
+        {
           id: "clients-management",
           label: "Clients",
           href: "/dashboard/admin/clients",
@@ -334,6 +355,27 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
           href: "/dashboard/team-salary",
           description: "Manage salary of team members",
           ...NAV_ICON.teamSalary,
+        },
+        {
+          id: "kpi",
+          label: "KPI Management",
+          href: "/dashboard/kpi",
+          description: "Monthly targets and achievement",
+          ...NAV_ICON.kpi,
+        },
+        {
+          id: "kpi-reports",
+          label: "KPI Reports",
+          href: "/dashboard/kpi-reports",
+          description: "Review monthly reports",
+          ...NAV_ICON.kpiReports,
+        },
+        {
+          id: "kpi-summary",
+          label: "Team Summary",
+          href: "/dashboard/kpi-summary",
+          description: "Team targets and achievement",
+          ...NAV_ICON.kpiSummary,
         },
         {
           id: "leads",
@@ -479,9 +521,24 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
     MY_FINANCE_GROUP,
   ],
 
-  MARKETER: [
+  VIDEO_EDITOR: [
     {
-      label: "Marketing",
+      label: "Video",
+      items: [
+        {
+          id: "dashboard",
+          label: "Dashboard",
+          href: "/dashboard",
+          ...NAV_ICON.dashboard,
+        },
+      ],
+    },
+    MY_FINANCE_GROUP,
+  ],
+
+  SALES_MARKETING: [
+    {
+      label: "Sales & Marketing",
       items: [
         {
           id: "leads",
@@ -497,6 +554,13 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
           ...NAV_ICON.teamSalary,
         },
         {
+          id: "my-kpi",
+          label: "My KPI",
+          href: "/dashboard/my-kpi",
+          description: "My monthly targets and report",
+          ...NAV_ICON.myKpi,
+        },
+        {
           id: "clients-management",
           label: "Clients",
           href: "/dashboard/clients",
@@ -507,6 +571,66 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
           label: "Dashboard",
           href: "/dashboard",
           ...NAV_ICON.dashboard,
+        },
+        {
+          id: "blogs",
+          label: "Content",
+          href: "/dashboard/blog",
+          ...NAV_ICON.content,
+        },
+      ],
+    },
+    MY_FINANCE_GROUP,
+  ],
+  MARKETING_SALES_LEAD: [
+    {
+      label: "Marketing & Sales Lead",
+      items: [
+        {
+          id: "dashboard",
+          label: "Dashboard",
+          href: "/dashboard",
+          ...NAV_ICON.dashboard,
+        },
+        {
+          id: "leads",
+          label: "Leads",
+          href: "/dashboard/leads",
+          ...NAV_ICON.leads,
+        },
+        {
+          id: "kpi",
+          label: "KPI Management",
+          href: "/dashboard/kpi",
+          description: "Monthly targets and achievement",
+          ...NAV_ICON.kpi,
+        },
+        {
+          id: "kpi-reports",
+          label: "KPI Reports",
+          href: "/dashboard/kpi-reports",
+          description: "Review monthly reports",
+          ...NAV_ICON.kpiReports,
+        },
+        {
+          id: "kpi-summary",
+          label: "Team Summary",
+          href: "/dashboard/kpi-summary",
+          description: "Team targets and achievement",
+          ...NAV_ICON.kpiSummary,
+        },
+        {
+          id: "my-kpi",
+          label: "My KPI",
+          href: "/dashboard/my-kpi",
+          description: "My monthly targets and report",
+          ...NAV_ICON.myKpi,
+        },
+        {
+          id: "clients-management",
+          label: "Clients",
+          href: "/dashboard/clients",
+          ...NAV_ICON.clients,
         },
         {
           id: "blogs",
@@ -555,5 +679,5 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
   ],
 };
 export const navigationConfig: Record<UserRole, NavGroup[]> = Object.fromEntries(
-  Object.entries(baseNavigationConfig).map(([role, groups]) => [role, [...groups, ATTENDANCE_GROUP, LEAVE_GROUP]]),
+  Object.entries(baseNavigationConfig).map(([role, groups]) => [role, [...groups, ATTENDANCE_LEAVE_GROUP]]),
 ) as Record<UserRole, NavGroup[]>;

@@ -19,7 +19,9 @@ export type UserRole =
   | "MANAGER"
   | "DEVELOPER"
   | "DESIGNER"
-  | "MARKETER"
+  | "SALES_MARKETING"
+  | "MARKETING_SALES_LEAD"
+  | "VIDEO_EDITOR"
   | "STAFF";
 
 export type PageAccess =
@@ -36,6 +38,10 @@ export type PageAccess =
   | "billing"
   | "security"
   | "team-salary"
+  | "kpi"
+  | "my-kpi"
+  | "kpi-reports"
+  | "kpi-summary"
   | "clients-management"
   | "project-management"
   | "manager-project-management"
@@ -81,6 +87,30 @@ export const availablePages: Page[] = [
     label: "Team Salary",
     icon: <Users className="h-4 w-4" />,
     description: "Manage team salary of members",
+  },
+  {
+    id: "kpi",
+    label: "KPI Management",
+    icon: <Users className="h-4 w-4" />,
+    description: "Monthly targets and achievement",
+  },
+  {
+    id: "my-kpi",
+    label: "My KPI",
+    icon: <Users className="h-4 w-4" />,
+    description: "My monthly targets and report",
+  },
+  {
+    id: "kpi-reports",
+    label: "KPI Reports",
+    icon: <Users className="h-4 w-4" />,
+    description: "Review monthly reports",
+  },
+  {
+    id: "kpi-summary",
+    label: "Team Summary",
+    icon: <Users className="h-4 w-4" />,
+    description: "Team targets and achievement",
   },
   {
     id: "analytics",
@@ -221,8 +251,21 @@ export const defaultRolePermissions: Record<UserRole, PageAccess[]> = {
     "automation",
   ],
   DESIGNER: ["dashboard", "documentation"],
-  MARKETER: [
+  VIDEO_EDITOR: ["dashboard", "documentation"],
+  SALES_MARKETING: [
     "dashboard",
+    "my-kpi",
+    "analytics",
+    "blogs",
+    "customer-management",
+    "my-salaries"
+  ],
+  MARKETING_SALES_LEAD: [
+    "dashboard",
+    "kpi",
+    "kpi-reports",
+    "kpi-summary",
+    "my-kpi",
     "analytics",
     "blogs",
     "customer-management",

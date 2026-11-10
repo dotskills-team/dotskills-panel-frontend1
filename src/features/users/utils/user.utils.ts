@@ -1,4 +1,4 @@
-import type { User } from "@/types/user.types";
+import { Role, type User } from "@/types/user.types";
 
 export const formatUserName = (user: User): string => {
   return user.fullName || `${user.firstName} ${user.lastName}`;
@@ -81,12 +81,14 @@ export const filterUsers = (
 
 export const canManageUser = (currentUserRole: string, targetUserRole: string): boolean => {
   const roleHierarchy: Record<string, number> = {
-    SUPER_ADMIN: 7,
-    ADMIN: 6,
-    MANAGER: 5,
-    DEVELOPER: 4,
-    DESIGNER: 3,
-    MARKETER: 2,
+    SUPER_ADMIN: 9,
+    ADMIN: 8,
+    MANAGER: 7,
+    DEVELOPER: 6,
+    DESIGNER: 5,
+    VIDEO_EDITOR: 4,
+    MARKETING_SALES_LEAD: 3,
+    SALES_MARKETING: 2,
     STAFF: 1,
   };
 
@@ -95,3 +97,19 @@ export const canManageUser = (currentUserRole: string, targetUserRole: string): 
 
 export const getUserFullName = (user?: { firstName: string; lastName: string }) =>
   user ? `${user.firstName} ${user.lastName}`.trim() : "";
+/** True only for the Marketing & Sales Lead role. */
+export const isMarketingSalesLead = (role?: string | null): boolean =>
+  role === Role.MARKETING_SALES_LEAD;
+
+/** True for the whole marketing/sales team: regular members and the lead. */
+export const isMarketingSalesTeam = (role?: string | null): boolean =>
+  role === Role.SALES_MARKETING || role === Role.MARKETING_SALES_LEAD;
+
+/** Only admin-level roles may see project value (budget, payments, dues). */
+export const canViewProjectValue = (role?: string | null): boolean =>
+  role === Role.SUPER_ADMIN || role === Role.ADMIN;
+
+/** Roles that may change who a client is credited to. */
+export const canEditCreditedTo = (role?: string | null): boolean =>
+  role === Role.SUPER_ADMIN || role === Role.ADMIN || role === Role.MARKETING_SALES_LEAD;
+

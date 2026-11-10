@@ -11,6 +11,8 @@ export const clientKeys = {
   detail: (id: string) =>
     [...clientKeys.details(), id] as const,
 
+  creditCandidates: () => [...clientKeys.all, "credit-candidates"] as const,
+
   deleted: () => [...clientKeys.all, "deleted"] as const,
 
   deletedList: (filters?: Record<string, unknown>) =>
