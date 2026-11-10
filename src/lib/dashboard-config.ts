@@ -540,6 +540,12 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
     {
       label: "Sales & Marketing",
       items: [
+         {
+          id: "dashboard",
+          label: "Dashboard",
+          href: "/dashboard",
+          ...NAV_ICON.dashboard,
+        },
         {
           id: "leads",
           label: "Leads",
@@ -566,12 +572,7 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
           href: "/dashboard/clients",
           ...NAV_ICON.clients,
         },
-        {
-          id: "dashboard",
-          label: "Dashboard",
-          href: "/dashboard",
-          ...NAV_ICON.dashboard,
-        },
+       
         {
           id: "blogs",
           label: "Content",
