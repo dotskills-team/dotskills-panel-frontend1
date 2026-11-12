@@ -1,6 +1,6 @@
 "use client";
 
-import { ListChecks, Pencil, Plus, ReceiptText } from "lucide-react";
+import { Eye, ListChecks, Pencil, Plus, ReceiptText } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,6 +15,7 @@ import {
 import { formatBdt, formatCount, getMemberName } from "@/features/kpi/utils/kpi.utils";
 import type { KpiProgressMember, KpiReportSummaryPerson } from "@/types/kpi.types";
 import { KpiReportBadge, KpiStatusBadge, PercentBar } from "./kpi-badges";
+import { KpiDeleteButton } from "./kpi-delete-button";
 import { KpiStatusControl } from "./kpi-status-control";
 
 interface KpiTableProps {
@@ -29,6 +30,8 @@ interface KpiTableProps {
   canManageRow: (member: KpiProgressMember) => boolean;
   onSetKpi: (userId: string) => void;
   onEdit: (member: KpiProgressMember) => void;
+  /** Read-only details, for the admin and the lead. */
+  onView: (member: KpiProgressMember) => void;
   /** Admin only. */
   onViewProjects: (member: KpiProgressMember) => void;
 }
@@ -44,6 +47,7 @@ export function KpiTable({
   canManageRow,
   onSetKpi,
   onEdit,
+  onView,
   onViewProjects,
 }: KpiTableProps) {
   if (isLoading) {
@@ -148,11 +152,14 @@ export function KpiTable({
                 <div className="flex items-center justify-end gap-1">
                   {kpi ? (
                     <>
-                      {canManage && (kpi.status !== "closed" || isAdmin) ? (
+                      <Button variant="ghost" size="icon" aria-label={`View KPI for ${name}`} onClick={() => onView(m)}>
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      {isAdmin && (
                         <Button variant="ghost" size="icon" aria-label={`Edit KPI for ${name}`} onClick={() => onEdit(m)}>
                           <Pencil className="h-4 w-4" />
                         </Button>
-                      ) : null}
+                      )}
                       {isAdmin && (
                         <Button
                           variant="ghost"
@@ -163,6 +170,7 @@ export function KpiTable({
                           <ReceiptText className="h-4 w-4" />
                         </Button>
                       )}
+                      {isAdmin && <KpiDeleteButton kpiId={kpi._id} label={`${name}'s KPI`} />}
                       {canManage && <KpiStatusControl kpiId={kpi._id} status={kpi.status} label={`${name}'s KPI`} />}
                     </>
                   ) : (

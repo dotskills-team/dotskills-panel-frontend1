@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Plus, Users } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import DashboardPageHeader from "@/components/dashboard/DashboardPageHeader";
 import { Button } from "@/components/ui/button";
@@ -16,15 +16,16 @@ import {
   formatMonthLabel,
   getCurrentMonth,
   getMemberName,
+  isKpiAdmin,
 } from "@/features/kpi/utils/kpi.utils";
 import { isMarketingSalesLead } from "@/features/users/utils/user.utils";
 import { useAuthStore } from "@/stores";
 import type { KpiProgressMember } from "@/types/kpi.types";
-import { BulkKpiDialog } from "./bulk-kpi-dialog";
 import { KpiFormDialog } from "./kpi-form-dialog";
 import { KpiMonthPicker } from "./kpi-month-picker";
 import { KpiProjectBreakdownDialog } from "./kpi-project-breakdown-dialog";
 import { KpiTable } from "./kpi-table";
+import { KpiViewDialog } from "./kpi-view-dialog";
 import { TeamKpiCard } from "./team-kpi-card";
 
 type FormState =
@@ -35,13 +36,13 @@ type FormState =
 export default function KpiPageClient() {
   const user = useAuthStore((s) => s.user);
   const role = user?.role;
-  const isAdmin = role === "SUPER_ADMIN" || role === "ADMIN";
+  const isAdmin = isKpiAdmin(role);
   const isLead = isMarketingSalesLead(role);
   const hasAccess = isAdmin || isLead;
 
   const [month, setMonth] = useState(getCurrentMonth);
   const [formState, setFormState] = useState<FormState | null>(null);
-  const [bulkOpen, setBulkOpen] = useState(false);
+  const [viewing, setViewing] = useState<{ _id: string; userId: string } | null>(null);
   const [breakdownFor, setBreakdownFor] = useState<KpiProgressMember["user"] | null>(null);
 
   const progressQuery = useKpiProgress(month, { enabled: hasAccess });
@@ -77,10 +78,6 @@ export default function KpiPageClient() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <KpiMonthPicker value={month} onChange={setMonth} />
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" onClick={() => setBulkOpen(true)}>
-            <Users className="mr-2 h-4 w-4" />
-            Bulk set KPI
-          </Button>
           <Button onClick={() => setFormState({ kind: "individual", editing: null })}>
             <Plus className="mr-2 h-4 w-4" />
             Add KPI
@@ -130,6 +127,7 @@ export default function KpiPageClient() {
               onEdit={(m) =>
                 m.kpi && setFormState({ kind: "individual", editing: { _id: m.kpi._id, userId: m.user._id } })
               }
+              onView={(m) => m.kpi && setViewing({ _id: m.kpi._id, userId: m.user._id })}
               onViewProjects={(m) => setBreakdownFor(m.user)}
             />
           </div>
@@ -148,9 +146,13 @@ export default function KpiPageClient() {
         />
       )}
 
-      {/* Mounted only while open so its month and result state start fresh each time */}
-      {bulkOpen && (
-        <BulkKpiDialog open onOpenChange={setBulkOpen} month={month} takenUserIds={takenUserIds} />
+      {viewing && (
+        <KpiViewDialog
+          open
+          onOpenChange={(open) => !open && setViewing(null)}
+          month={month}
+          kpi={viewing}
+        />
       )}
 
       {isAdmin && (

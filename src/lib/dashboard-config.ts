@@ -443,6 +443,27 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
           href: "/dashboard/manager-projects",
           ...NAV_ICON.managerProjectManagement,
         },
+        {
+          id: "kpi",
+          label: "KPI Management",
+          href: "/dashboard/kpi",
+          description: "Monthly targets and achievement",
+          ...NAV_ICON.kpi,
+        },
+        {
+          id: "kpi-reports",
+          label: "KPI Reports",
+          href: "/dashboard/kpi-reports",
+          description: "Review monthly reports",
+          ...NAV_ICON.kpiReports,
+        },
+        {
+          id: "kpi-summary",
+          label: "Team Summary",
+          href: "/dashboard/kpi-summary",
+          description: "Team targets and achievement",
+          ...NAV_ICON.kpiSummary,
+        },
         
       ],
     },
@@ -553,11 +574,10 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
           ...NAV_ICON.leads,
         },
         {
-          id: "team-salary",
-          label: "Team Salary",
-          href: "/dashboard/team-salary",
-          description: "Manage salary of team members",
-          ...NAV_ICON.teamSalary,
+          id: "my-salaries",
+          label: "My Salaries",
+          href: "/dashboard/my-salaries",
+          ...NAV_ICON.payments,
         },
         {
           id: "my-kpi",
@@ -573,12 +593,6 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
           ...NAV_ICON.clients,
         },
        
-        {
-          id: "blogs",
-          label: "Content",
-          href: "/dashboard/blog",
-          ...NAV_ICON.content,
-        },
       ],
     },
     MY_FINANCE_GROUP,
@@ -628,17 +642,17 @@ const baseNavigationConfig: Record<UserRole, NavGroup[]> = {
           ...NAV_ICON.myKpi,
         },
         {
+          id: "my-salaries",
+          label: "My Salaries",
+          href: "/dashboard/my-salaries",
+          ...NAV_ICON.payments,
+        },
+        {
           id: "clients-management",
           label: "Clients",
           href: "/dashboard/clients",
           ...NAV_ICON.clients,
-        },
-        {
-          id: "blogs",
-          label: "Content",
-          href: "/dashboard/blog",
-          ...NAV_ICON.content,
-        },
+        }
       ],
     },
     MY_FINANCE_GROUP,

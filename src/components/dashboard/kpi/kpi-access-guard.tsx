@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 
+import { isKpiAdmin } from "@/features/kpi/utils/kpi.utils";
 import { isMarketingSalesLead } from "@/features/users/utils/user.utils";
 import { useAuthStore } from "@/stores";
 
@@ -19,7 +20,7 @@ export function KpiAccessGuard({ children }: KpiAccessGuardProps) {
   // Auth is still being restored
   if (!user) return null;
 
-  const allowed = user.role === "SUPER_ADMIN" || user.role === "ADMIN" || isMarketingSalesLead(user.role);
+  const allowed = isKpiAdmin(user.role) || isMarketingSalesLead(user.role);
 
   if (!allowed) {
     return (

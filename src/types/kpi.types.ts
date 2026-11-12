@@ -11,6 +11,11 @@ export interface KpiExtraItem {
   target: number;
 }
 
+export interface KpiBudgetItem {
+  name: string;
+  amount: number;
+}
+
 export interface KpiUserRef {
   _id: string;
   firstName: string;
@@ -29,7 +34,9 @@ export interface IKpi {
   user?: KpiUserRef | null;
   targetSales: number;
   targetProjects: number;
+  /** Total of budgetItems, calculated by the server. */
   budget: number;
+  budgetItems?: KpiBudgetItem[];
   extraItems: KpiExtraItem[];
   status: KpiStatus;
   note?: string;
@@ -85,10 +92,6 @@ export interface KpiTeamContext {
   };
 }
 
-export interface KpiBulkResult {
-  created: IKpi[];
-  skipped: { user: string; reason: string }[];
-}
 
 /** Admin-only: one credited project with its value. */
 export interface KpiProjectRow {
@@ -169,7 +172,7 @@ export interface CreateKpiPayload {
   user?: string;
   targetSales: number;
   targetProjects: number;
-  budget: number;
+  budgetItems: KpiBudgetItem[];
   extraItems: KpiExtraItem[];
   status?: "draft" | "active";
   note?: string;
@@ -178,21 +181,11 @@ export interface CreateKpiPayload {
 export interface UpdateKpiPayload {
   targetSales?: number;
   targetProjects?: number;
-  budget?: number;
+  budgetItems?: KpiBudgetItem[];
   extraItems?: KpiExtraItem[];
   note?: string;
 }
 
-export interface BulkKpiPayload {
-  month: string;
-  items: {
-    user: string;
-    targetSales: number;
-    targetProjects: number;
-    budget: number;
-    extraItems: KpiExtraItem[];
-  }[];
-}
 
 /* --------------------------- member-facing (own KPI) --------------------------- */
 

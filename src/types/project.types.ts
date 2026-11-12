@@ -3,6 +3,7 @@ import { ApiResponse } from "./api.types";
 export enum ProjectStatus {
   PLANNING = "PLANNING",
   IN_PROGRESS = "IN_PROGRESS",
+  QA_TESTING = "QA_TESTING",
   ON_HOLD = "ON_HOLD",
   COMPLETED = "COMPLETED",
   CANCELLED = "CANCELLED",
@@ -256,6 +257,7 @@ export interface IDeveloperProjectStats {
     total: number;
     Planning: number;
     InProgress: number;
+    QaTesting: number;
     OnHold: number;
     Completed: number;
     DoneDue: number;

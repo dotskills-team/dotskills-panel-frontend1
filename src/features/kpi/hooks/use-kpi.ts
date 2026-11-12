@@ -4,7 +4,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { kpiApi } from "../api/kpi.api";
 import type {
-  BulkKpiPayload,
   CreateKpiPayload,
   KpiListQuery,
   KpiReportListQuery,
@@ -128,19 +127,20 @@ export function useCreateKpi() {
   });
 }
 
-export function useBulkCreateKpi() {
-  const invalidate = useInvalidateKpi();
-  return useMutation({
-    mutationFn: (payload: BulkKpiPayload) => kpiApi.bulkCreate(payload),
-    onSuccess: invalidate,
-  });
-}
 
 export function useUpdateKpi() {
   const invalidate = useInvalidateKpi();
   return useMutation({
     mutationFn: ({ id, payload }: { id: string; payload: UpdateKpiPayload }) =>
       kpiApi.update(id, payload),
+    onSuccess: invalidate,
+  });
+}
+
+export function useDeleteKpi() {
+  const invalidate = useInvalidateKpi();
+  return useMutation({
+    mutationFn: (id: string) => kpiApi.remove(id),
     onSuccess: invalidate,
   });
 }

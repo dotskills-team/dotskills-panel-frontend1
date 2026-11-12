@@ -122,7 +122,7 @@ export const canModerateReport = (
   owner: { _id: string; role?: string },
 ): boolean => {
   if (!viewer) return false;
-  if (viewer.role === "SUPER_ADMIN" || viewer.role === "ADMIN") return true;
+  if (isKpiAdmin(viewer.role)) return true;
   return (
     viewer.role === "MARKETING_SALES_LEAD" &&
     owner.role === "SALES_MARKETING" &&
@@ -140,7 +140,11 @@ export const canManageMemberKpi = (
   owner: { _id?: string; role?: string } | null | undefined,
 ): boolean => {
   if (!viewer || !owner) return false;
-  if (viewer.role === "SUPER_ADMIN" || viewer.role === "ADMIN") return true;
+  if (isKpiAdmin(viewer.role)) return true;
   if (viewer.role !== "MARKETING_SALES_LEAD") return false;
   return owner.role === "SALES_MARKETING" || (Boolean(viewer._id) && owner._id === viewer._id);
 };
+
+/** Admin-level access to the KPI module: super admin, admin and manager. */
+export const isKpiAdmin = (role?: string | null): boolean =>
+  role === "SUPER_ADMIN" || role === "ADMIN" || role === "MANAGER";

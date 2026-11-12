@@ -66,7 +66,7 @@ interface ProjectsStatsProps {
 }
 
 export function ProjectsStats({ projectStat, isLoading, showMoney = true }: ProjectsStatsProps) {
-  const { total, Planning, InProgress, Completed, OnHold, DoneDue, Delivered, totalValue, totalPaid, totalDue, totalOverpaid } =
+  const { total, Planning, InProgress, QaTesting, Completed, OnHold, DoneDue, Delivered, totalValue, totalPaid, totalDue, totalOverpaid } =
     projectStat || {};
 
   const moneyStats = [
@@ -83,6 +83,7 @@ export function ProjectsStats({ projectStat, isLoading, showMoney = true }: Proj
     { label: "Total Projects", value: total, icon: Briefcase, tone: "text-blue-100", gradient: "from-blue-600 via-indigo-600 to-violet-600" },
     { label: "Planning", value: Planning, icon: ListTodo, tone: "text-slate-100", gradient: "from-slate-600 via-slate-700 to-slate-800" },
     { label: "In Progress", value: InProgress, icon: Clock, tone: "text-amber-100", gradient: "from-amber-500 via-orange-500 to-orange-600" },
+    { label: "QA Testing", value: QaTesting, icon: Clock, tone: "text-violet-100", gradient: "from-violet-500 via-purple-600 to-indigo-700" },
     { label: "On Hold", value: OnHold, icon: CirclePause, tone: "text-rose-100", gradient: "from-rose-500 via-pink-600 to-fuchsia-600" },
     { label: "Completed", value: Completed, icon: CircleCheck, tone: "text-emerald-100", gradient: "from-emerald-500 via-teal-600 to-cyan-700" },
     { label: "Done & Due", value: DoneDue, icon: Wallet, tone: "text-violet-100", gradient: "from-violet-600 via-purple-600 to-fuchsia-700" },

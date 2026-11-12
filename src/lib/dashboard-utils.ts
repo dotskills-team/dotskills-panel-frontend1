@@ -27,7 +27,6 @@ const routeTitleMap: Record<string, string> = {
   "/staff/dashboard/returns": "Returns",
   "/staff/dashboard/product-verifications": "Product Verifications",
   "/staff/dashboard/coupons": "Coupons",
-  "/staff/dashboard/blog": "Blog",
   "/staff/dashboard/admin/user-management": "Staff Management",
   "/staff/dashboard/reviews": "Reviews",
   "/staff/dashboard/admin/customer-management": "Customer Management",

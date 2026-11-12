@@ -22,6 +22,7 @@ import {
   formatCount,
   formatMonthLabel,
   getCurrentMonth,
+  isKpiAdmin,
   getMemberName,
   toPercent,
 } from "@/features/kpi/utils/kpi.utils";
@@ -35,7 +36,7 @@ import { KpiMeter } from "../my-kpi/my-kpi-card";
 
 export default function KpiSummaryPageClient() {
   const role = useAuthStore((s) => s.user?.role);
-  const isAdmin = role === "SUPER_ADMIN" || role === "ADMIN";
+  const isAdmin = isKpiAdmin(role);
 
   const [month, setMonth] = useState(getCurrentMonth);
   const [breakdownFor, setBreakdownFor] = useState<KpiUserRef | null>(null);

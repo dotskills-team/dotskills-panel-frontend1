@@ -43,6 +43,7 @@ import {
 import { useAuthStore } from "@/stores";
 import { getErrorMessage } from "@/utils/getErrorMessage";
 import type { IKpi, KpiType } from "@/types/kpi.types";
+import { KpiBudgetItemsField } from "./kpi-budget-items-field";
 import { KpiExtraItemsField } from "./kpi-extra-items-field";
 
 type FormInput = z.input<typeof individualKpiFormSchema>;
@@ -52,7 +53,7 @@ const EMPTY: FormInput = {
   user: "",
   targetSales: 0,
   targetProjects: 0,
-  budget: 0,
+  budgetItems: [],
   extraItems: [],
   note: "",
   activateNow: false,
@@ -115,7 +116,12 @@ export function KpiFormDialog({
           user: fullKpi.user?._id ?? "",
           targetSales: fullKpi.targetSales,
           targetProjects: fullKpi.targetProjects,
-          budget: fullKpi.budget,
+          // A KPI saved before budget items existed only has a total: show it as one item
+          budgetItems: fullKpi.budgetItems?.length
+            ? fullKpi.budgetItems.map((i) => ({ ...i }))
+            : fullKpi.budget > 0
+              ? [{ name: "Budget", amount: fullKpi.budget }]
+              : [],
           extraItems: fullKpi.extraItems.map((i) => ({ ...i })),
           note: fullKpi.note ?? "",
           activateNow: false,
@@ -136,7 +142,7 @@ export function KpiFormDialog({
           payload: {
             targetSales: values.targetSales,
             targetProjects: values.targetProjects,
-            budget: values.budget,
+            budgetItems: values.budgetItems,
             extraItems,
             note: values.note ?? "",
           },
@@ -153,7 +159,7 @@ export function KpiFormDialog({
           user: isTeam ? undefined : values.user,
           targetSales: values.targetSales,
           targetProjects: values.targetProjects,
-          budget: values.budget,
+          budgetItems: values.budgetItems,
           extraItems,
           status: values.activateNow ? "active" : "draft",
           note: values.note || undefined,
@@ -254,19 +260,14 @@ export function KpiFormDialog({
                   <p className="text-xs text-red-500">{errors.targetProjects.message}</p>
                 )}
               </div>
-              <div className="space-y-1.5 sm:col-span-2">
-                <Label htmlFor="kpi-budget">Budget (BDT)</Label>
-                <Input
-                  id="kpi-budget"
-                  type="number"
-                  min={0}
-                  step="any"
-                  disabled={loadingExisting}
-                  {...register("budget")}
-                />
-                {errors.budget && <p className="text-xs text-red-500">{errors.budget.message}</p>}
-              </div>
             </div>
+
+            <KpiBudgetItemsField
+              control={control as never}
+              register={register as never}
+              errors={errors as never}
+              disabled={loadingExisting}
+            />
 
             <KpiExtraItemsField
               // The field only touches `extraItems`, so the form's typed control is passed untyped

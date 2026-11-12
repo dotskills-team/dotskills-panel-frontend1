@@ -115,6 +115,7 @@ const STAT_CARDS: {
     { key: "total", label: "Total Projects", icon: FolderKanban, linear: "from-blue-600 to-blue-500" },
     { key: "Planning", label: "Planning", icon: ListChecks, linear: "from-slate-800 to-slate-700" },
     { key: "InProgress", label: "In Progress", icon: Clock, linear: "from-orange-600 to-orange-500" },
+    { key: "QaTesting", label: "QA Testing", icon: ListChecks, linear: "from-violet-700 to-purple-500" },
     { key: "OnHold", label: "On Hold", icon: PauseCircle, linear: "from-red-700 to-rose-500" },
     { key: "Completed", label: "Completed", icon: CheckCircle2, linear: "from-green-700 to-emerald-500" },
     { key: "DoneDue", label: "Done & Due", icon: Wallet, linear: "from-purple-700 to-fuchsia-500" },
