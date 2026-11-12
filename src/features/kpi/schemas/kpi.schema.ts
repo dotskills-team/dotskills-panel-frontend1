@@ -19,10 +19,16 @@ export const extraItemFormSchema = z.object({
   target: money("Target"),
 });
 
+export const budgetItemFormSchema = z.object({
+  name: z.string().trim().min(1, "Name is required.").max(100),
+  amount: money("Amount"),
+});
+
 const targetsShape = {
   targetSales: money("Target sales"),
   targetProjects: count("Target projects"),
-  budget: money("Budget"),
+  // The budget is the sum of these items; it is never typed in directly
+  budgetItems: z.array(budgetItemFormSchema).max(30, "At most 30 budget items."),
   extraItems: z.array(extraItemFormSchema).max(20, "At most 20 extra items."),
   note: z.string().trim().max(2000).optional(),
 };
@@ -39,22 +45,10 @@ export const teamKpiFormSchema = z.object({
   ...targetsShape,
 });
 
-export const bulkKpiFormSchema = z.object({
-  rows: z.array(
-    z.object({
-      user: z.string(),
-      include: z.boolean(),
-      targetSales: money("Target sales"),
-      targetProjects: count("Target projects"),
-      budget: money("Budget"),
-    }),
-  ),
-});
 
 export type ExtraItemFormValues = z.infer<typeof extraItemFormSchema>;
 export type IndividualKpiFormValues = z.infer<typeof individualKpiFormSchema>;
 export type TeamKpiFormValues = z.infer<typeof teamKpiFormSchema>;
-export type BulkKpiFormValues = z.infer<typeof bulkKpiFormSchema>;
 
 /** Monthly report content. Achieved sales and projects are never sent: the server computes them. */
 export const kpiReportFormSchema = z.object({

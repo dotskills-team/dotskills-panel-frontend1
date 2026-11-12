@@ -5,6 +5,7 @@ export const STATUS_LABELS: Record<string, string> = {
     PLANNING: "Planning",
     PENDING: "Pending",
     IN_PROGRESS: "In Progress",
+    QA_TESTING: "QA Testing",
     ON_HOLD: "On Hold",
     COMPLETED: "Completed",
     DONE_DUE: "Done & Due",
@@ -21,6 +22,8 @@ export const STATUS_BADGE: Record<string, string> = {
         "border-yellow-500 bg-yellow-200 text-yellow-900 dark:border-yellow-500/50 dark:bg-yellow-500/20 dark:text-yellow-300",
     IN_PROGRESS:
         "border-blue-500 bg-blue-200 text-blue-900 dark:border-blue-500/50 dark:bg-blue-500/20 dark:text-blue-300",
+    QA_TESTING:
+        "border-violet-500 bg-violet-200 text-violet-900 dark:border-violet-500/50 dark:bg-violet-500/20 dark:text-violet-300",
     ON_HOLD:
         "border-red-500 bg-red-200 text-red-900 dark:border-red-500/50 dark:bg-red-500/20 dark:text-red-300",
     COMPLETED:

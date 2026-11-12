@@ -240,6 +240,9 @@ export const defaultRolePermissions: Record<UserRole, PageAccess[]> = {
     "customer-management",
     "my-salaries",
     "manager-project-management",
+    "kpi",
+    "kpi-reports",
+    "kpi-summary",
   ],
   DEVELOPER: [
     "dashboard",

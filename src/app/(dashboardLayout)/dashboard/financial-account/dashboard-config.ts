@@ -296,11 +296,6 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
           label: "Dashboard",
           href: "/dashboard",
         },
-        {
-          id: "blogs",
-          label: "Content",
-          href: "/dashboard/blog",
-        },
       ],
     },
   ],
@@ -328,11 +323,6 @@ export const navigationConfig: Record<UserRole, NavGroup[]> = {
           id: "dashboard",
           label: "Dashboard",
           href: "/dashboard",
-        },
-        {
-          id: "blogs",
-          label: "Content",
-          href: "/dashboard/blog",
         },
       ],
     },

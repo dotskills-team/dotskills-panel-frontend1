@@ -96,6 +96,8 @@ const PROJECT_STATUS_STYLES: Record<string, string> = {
   PLANNING: "bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300",
   IN_PROGRESS:
     "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+  QA_TESTING:
+    "bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400",
   ON_HOLD:
     "bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400",
   COMPLETED:

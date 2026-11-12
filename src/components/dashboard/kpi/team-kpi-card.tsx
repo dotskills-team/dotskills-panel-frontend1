@@ -16,6 +16,7 @@ import {
 } from "@/features/kpi/utils/kpi.utils";
 import type { KpiProgress, KpiTeamContext } from "@/types/kpi.types";
 import { KpiStatusBadge } from "./kpi-badges";
+import { KpiDeleteButton } from "./kpi-delete-button";
 import { KpiStatusControl } from "./kpi-status-control";
 
 interface TeamKpiCardProps {
@@ -111,10 +112,13 @@ export function TeamKpiCard({
           <div className="flex items-center gap-2">
             {teamKpi && <KpiStatusControl kpiId={teamKpi._id} status={teamKpi.status} label="the team KPI" />}
             {teamKpi ? (
-              <Button size="sm" variant="outline" onClick={onEdit}>
-                <Pencil className="mr-1 h-3.5 w-3.5" />
-                Edit team KPI
-              </Button>
+              <>
+                <Button size="sm" variant="outline" onClick={onEdit}>
+                  <Pencil className="mr-1 h-3.5 w-3.5" />
+                  Edit team KPI
+                </Button>
+                <KpiDeleteButton kpiId={teamKpi._id} label="the team KPI" variant="button" />
+              </>
             ) : (
               <Button size="sm" onClick={onCreate}>
                 <Plus className="mr-1 h-3.5 w-3.5" />

@@ -1,10 +1,8 @@
 import { apiClient } from "@/lib/axios";
 import type { ApiResponse } from "@/types";
 import type {
-  BulkKpiPayload,
   CreateKpiPayload,
   IKpi,
-  KpiBulkResult,
   IKpiReport,
   KpiListQuery,
   KpiMyProgress,
@@ -48,11 +46,12 @@ export const kpiApi = {
 
   create: (payload: CreateKpiPayload) => apiClient.post<ApiResponse<IKpi>>(BASE_URL, payload),
 
-  bulkCreate: (payload: BulkKpiPayload) =>
-    apiClient.post<ApiResponse<KpiBulkResult>>(`${BASE_URL}/bulk`, payload),
 
   update: (id: string, payload: UpdateKpiPayload) =>
     apiClient.patch<ApiResponse<IKpi>>(`${BASE_URL}/${id}`, payload),
+
+  /** Admin only. Also removes the KPI's monthly report. */
+  remove: (id: string) => apiClient.delete<ApiResponse<null>>(`${BASE_URL}/${id}`),
 
   updateStatus: (id: string, status: Exclude<KpiStatus, "draft">) =>
     apiClient.patch<ApiResponse<IKpi>>(`${BASE_URL}/${id}/status`, { status }),
