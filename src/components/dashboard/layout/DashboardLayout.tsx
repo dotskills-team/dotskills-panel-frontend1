@@ -5,6 +5,7 @@ import { PremiumSidebar } from "../sidebar/PremiumSidebar";
 import DashboardSkeleton from "../DashboardSkeleton";
 import { useCurrentUser } from "@/hooks/auth/useCurrentUser";
 import { DashboardHeader } from "../sidebar/DashboardHeader";
+import { AiAssistantButton } from "../ai/AiAssistantButton";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -35,6 +36,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </div>
       </SidebarInset>
+      <AiAssistantButton />
     </SidebarProvider>
   );
 }
