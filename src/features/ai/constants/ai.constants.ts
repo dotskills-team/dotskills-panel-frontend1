@@ -1,4 +1,3 @@
-import { Role } from "@/types/user.types";
 
 export const AI_WORKSPACES = ["business", "personal"] as const;
 export type AiWorkspace = (typeof AI_WORKSPACES)[number];
@@ -9,7 +8,9 @@ export const AI_WORKSPACE_LABELS: Record<AiWorkspace, string> = {
 };
 
 /** Only these roles see the Personal workspace (the backend enforces the same rule). */
-export const AI_PERSONAL_ROLES: string[] = [Role.SUPER_ADMIN, Role.ADMIN];
+// Temporarily off for everyone, admins included. Restore [Role.SUPER_ADMIN, Role.ADMIN] (import Role from "@/types/user.types") to turn it back on
+// (and PERSONAL_WORKSPACE_ROLES in the backend ai.constant.ts).
+export const AI_PERSONAL_ROLES: string[] = [];
 
 export const canUsePersonalWorkspace = (role?: string | null): boolean =>
   !!role && AI_PERSONAL_ROLES.includes(role);
