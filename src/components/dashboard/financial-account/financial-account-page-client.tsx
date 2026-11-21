@@ -237,18 +237,18 @@ export function AccountBalanceCard({
       <div className="absolute -right-10 -top-10 size-32 rounded-full bg-white/10 transition-transform duration-500 group-hover:scale-125" />
       <div className="absolute -bottom-14 -left-10 size-28 rounded-full bg-black/10" />
 
-      <CardContent className="relative p-4 sm:p-5">
-        <div className="flex items-start justify-between gap-3">
-          <div className="flex min-w-0 items-center gap-3">
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
-              <Icon className="size-5 text-white" />
+      <CardContent className="relative p-2.5 sm:p-5">
+        <div className="flex items-start justify-between gap-2 sm:gap-3">
+          <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+            <div className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm sm:size-11 sm:rounded-xl">
+              <Icon className="size-3.5 text-white sm:size-5" />
             </div>
 
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold">
+              <p className="truncate text-[11px] font-semibold leading-tight sm:text-sm">
                 {account.accountName}
               </p>
-              <p className="mt-0.5 truncate text-[11px] text-white/75">
+              <p className="mt-0.5 hidden truncate text-[11px] text-white/75 sm:block">
                 {accountType}
                 {ownerLabel ? ` · ${ownerLabel}` : ""}
               </p>
@@ -257,7 +257,7 @@ export function AccountBalanceCard({
 
           <Badge
             className={cn(
-              "shrink-0 border-0 bg-white/20 text-[10px] text-white hover:bg-white/20",
+              "hidden shrink-0 border-0 bg-white/20 text-[10px] text-white hover:bg-white/20 sm:inline-flex",
               account.status === "ACTIVE" ? "text-white" : "text-white/70",
             )}
           >
@@ -265,16 +265,16 @@ export function AccountBalanceCard({
           </Badge>
         </div>
 
-        <div className="mt-5">
-          <p className="text-[11px] font-medium uppercase tracking-wider text-white/70">
+        <div className="mt-2.5 sm:mt-5">
+          <p className="text-[9px] font-medium uppercase tracking-wider text-white/70 sm:text-[11px]">
             Current Balance
           </p>
-          <p className="mt-1 text-2xl font-bold tracking-tight sm:text-[26px]">
+          <p className="mt-0.5 truncate text-sm font-bold tracking-tight sm:mt-1 sm:text-2xl">
             {money(account.currentBalance)}
           </p>
         </div>
 
-        <div className="mt-4 flex items-center justify-between border-t border-white/20 pt-3">
+        <div className="mt-4 hidden items-center justify-between border-t border-white/20 pt-3 sm:flex">
           <div className="min-w-0">
             <p className="text-[10px] text-white/60">Opening Balance</p>
             <p className="mt-0.5 text-xs font-medium text-white/90">
@@ -306,7 +306,7 @@ export function AccountBalanceGrid({
   accounts: IFinancialAccount[];
 }) {
   return (
-    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+    <div className="grid grid-cols-2 gap-2 sm:gap-4 xl:grid-cols-3">
       {accounts.map((account, index) => (
         <AccountBalanceCard
           key={account._id}
@@ -557,7 +557,7 @@ export function FinancialAccountPageClient() {
             </Badge>
           </div>
 
-          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-3 xl:grid-cols-4">
             {rows.map((account) => (
               <AccountBalanceCard
                 key={account._id}
