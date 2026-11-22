@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { TakaIcon } from "@/components/shared/TakaIcon";
 
-import { useDeleteExpense, useExpenses } from "@/features/expense/hooks/use-expense";
+import { useDeleteExpense, useExpenseSummary, useExpenses } from "@/features/expense/hooks/use-expense";
 import { useExpenseCategories } from "@/features/expense-category/hooks/use-expense-category";
 import { useFinancialAccounts } from "@/features/financial-account/hooks/use-financial-account";
 import { EXPENSE_SORT_OPTIONS } from "@/features/expense/constants/expense.constant";
@@ -94,6 +94,18 @@ export function ExpensePageClient() {
   );
 
   const list = useExpenses(query);
+  // Stat cards follow every filter (date, search, category, account) but not paging or sorting.
+  const summaryQuery = useMemo(
+    () => ({
+      searchTerm: query.searchTerm,
+      categoryId: query.categoryId,
+      financialAccountId: query.financialAccountId,
+      startDate: query.startDate,
+      endDate: query.endDate,
+    }),
+    [query.searchTerm, query.categoryId, query.financialAccountId, query.startDate, query.endDate],
+  );
+  const summary = useExpenseSummary(summaryQuery);
   const deleteMutation = useDeleteExpense();
 
   const rows = list.data?.data ?? [];
@@ -156,7 +168,7 @@ export function ExpensePageClient() {
         </Button>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 sm:gap-3">
+      <div className="grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-3">
         <FinanceStatCard
           title="Total Expenses"
           value={String(meta?.total ?? rows.length)}
@@ -164,6 +176,15 @@ export function ExpensePageClient() {
           icon={Receipt}
           tone="text-blue-100"
           gradient="from-blue-600 via-indigo-600 to-violet-600"
+        />
+
+        <FinanceStatCard
+          title="Total Expense"
+          value={money(summary.data?.data.totalAmount)}
+          caption={`Across ${summary.data?.data.totalCount ?? 0} expenses · follows filters`}
+          icon={TakaIcon}
+          tone="text-amber-100"
+          gradient="from-amber-500 via-orange-500 to-red-500"
         />
 
         <FinanceStatCard
